@@ -16,7 +16,7 @@ Installation
 ------------
 Install the plugin with npm:
 ```shell
-$ npm install --save-dev numical/script-ext-html-webpack-plugin
+$ npm install --save-dev script-ext-html-webpack-plugin
 ```
 
 Basic Usage
@@ -75,7 +75,7 @@ In more complicated use cases it may prove difficult to ensure that the pattern 
 
 4. if a script name does not match any of the previous conditions, it will have the `defaultAttribute' attribute.
 
-Some examples:
+Some Examples:
 
 All scripts with 'important' in their name are sync and all others set to `defer`:
 ```javascript
