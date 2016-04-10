@@ -14,7 +14,7 @@ const SRC_PATTERN = new RegExp('src="(.*)"', 'i');
 class ScriptExtHtmlWebpackPlugin {
 
   constructor (options) {
-    this.options = Object.assign({}, DEFAULT_OPTIONS, options);
+    this.options = Object.assign(DEFAULT_OPTIONS, options);
   }
 
   apply (compiler) {

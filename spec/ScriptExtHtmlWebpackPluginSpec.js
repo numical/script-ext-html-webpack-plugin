@@ -15,7 +15,7 @@ const ScriptExtHtmlWebpackPlugin = require('../index.js');
 
 const OUTPUT_DIR = path.join(__dirname, '../dist');
 
-function testPlugin (webpackConfig, expectedResults, done, showHtml) {
+function testPlugin (webpackConfig, expectedResults, done) {
   const outputFile = 'index.html';
   webpack(webpackConfig, (err, stats) => {
     expect(err).toBeFalsy();
@@ -29,9 +29,6 @@ function testPlugin (webpackConfig, expectedResults, done, showHtml) {
       return done();
     }
     const htmlContent = fs.readFileSync(path.join(OUTPUT_DIR, outputFile)).toString();
-    if (showHtml) {
-      console.log(htmlContent);
-    }
     expectedResults.forEach((expectedResult) => {
       if (expectedResult instanceof RegExp) {
         expect(htmlContent).toMatch(expectedResult);
@@ -44,11 +41,11 @@ function testPlugin (webpackConfig, expectedResults, done, showHtml) {
 }
 
 describe('ScriptExtHtmlWebpackPlugin', function () {
-  beforeEach(function (done) {
+  beforeEach((done) => {
     rm_rf(OUTPUT_DIR, done);
   });
 
-  it('does nothing with default settings', function (done) {
+  it('does nothing with default settings', (done) => {
     testPlugin(
       { entry: path.join(__dirname, 'fixtures/script1.js'),
         output: {
@@ -64,7 +61,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
       done);
   });
 
-  it('sets async default for single script', function (done) {
+  it('sets async default for single script', (done) => {
     testPlugin(
       { entry: path.join(__dirname, 'fixtures/script1.js'),
         output: {
@@ -82,7 +79,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
       done);
   });
 
-  it('sets defer default for single script', function (done) {
+  it('sets defer default for single script', (done) => {
     testPlugin(
       { entry: path.join(__dirname, 'fixtures/script1.js'),
         output: {
@@ -100,7 +97,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
       done);
   });
 
-  it('sets async default for multiple scripts', function (done) {
+  it('sets async default for multiple scripts', (done) => {
     testPlugin(
       {
         entry: {
@@ -110,7 +107,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         },
         output: {
           path: OUTPUT_DIR,
-          filename: '[name]_bundle.js'
+          filename: '[name].js'
         },
         plugins: [
           new HtmlWebpackPlugin(),
@@ -120,9 +117,152 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a_bundle.js" async><\/script>)/,
-        /(<script src="b_bundle.js" async><\/script>)/,
-        /(<script src="c_bundle.js" async><\/script>)/
+        /(<script src="a.js" async><\/script>)/,
+        /(<script src="b.js" async><\/script>)/,
+        /(<script src="c.js" async><\/script>)/
+      ],
+      done);
+  });
+
+  it('async string exceptions and sync default', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            async: ['a', 'b']
+          })
+        ]
+      },
+      [
+        /(<script src="a.js" async><\/script>)/,
+        /(<script src="b.js" async><\/script>)/,
+        /(<script src="c.js"><\/script>)/
+      ],
+      done);
+  });
+
+  it('sync and defer string exceptions and async default', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            sync: ['a'],
+            defer: ['b'],
+            defaultAttribute: 'async'
+          })
+        ]
+      },
+      [
+        /(<script src="a.js"><\/script>)/,
+        /(<script src="b.js" defer><\/script>)/,
+        /(<script src="c.js" async><\/script>)/
+      ],
+      done);
+  });
+
+  it('defer regex exceptions and sync default', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            defer: [/(a|b).*/],
+            defaultAttribute: 'sync'
+          })
+        ]
+      },
+      [
+        /(<script src="a.js" defer><\/script>)/,
+        /(<script src="b.js" defer><\/script>)/,
+        /(<script src="c.js"><\/script>)/
+      ],
+      done);
+  });
+
+  it('sync precedence and defer default', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            sync: [/(a|c).*/],
+            async: ['c'],
+            defer: [/a.*/],
+            defaultAttribute: 'defer'
+          })
+        ]
+      },
+      [
+        /(<script src="a.js"><\/script>)/,
+        /(<script src="b.js" defer><\/script>)/,
+        /(<script src="c.js"><\/script>)/
+      ],
+    done);
+  });
+
+  it('async precedence, mixed strings and regex, sync default', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            async: [/(a|c).*/, 'b'],
+            defer: [/a.*/],
+            defaultAttribute: 'sync'
+          })
+        ]
+      },
+      [
+        /(<script src="a.js" async><\/script>)/,
+        /(<script src="b.js" async><\/script>)/,
+        /(<script src="c.js" async><\/script>)/
       ],
       done);
   });

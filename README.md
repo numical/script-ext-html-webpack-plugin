@@ -1,5 +1,10 @@
 Script Extension for HTML Webpack Plugin
 ========================================
+[![npm version](https://badge.fury.io/js/script-ext-html-webpack-plugin.svg)](http://badge.fury.io/js/script-ext-html-webpack-plugin) [![Dependency Status](https://david-dm.org/numical/script-ext-html-webpack-plugin.svg)](https://david-dm.org/numical/script-ext-html-webpack-plugin) [![Build status](https://travis-ci.org/numical/script-ext-html-webpack-plugin.svg)](https://travis-ci.org/numical/script-ext-html-webpack-plugin) [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard)
+
+[![NPM](https://nodei.co/npm/script-ext-html-webpack-plugin.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/script-ext-html-webpack-plugin/)
+
+
 Enhances [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin)
 functionality with `async` and `defer` attributes for `<script>` elements. 
 
@@ -35,6 +40,8 @@ attribute.  Default value of the option is an empty array.
 - `defer`: array of `String`'s and/or `RegExp`'s defining scripts that should have a `defer` attribute.  Default value of the option is an empty array.
 - `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute. Default value of the option is `'sync'`.
 
+In the arrays a `String` value matches if it is a substring of the script name.
+
 In more complicated use cases it may prove difficult to ensure that the pattern matching for different attributes are mutually exclusive.  To prevent confusion, the plugin operates a simple precedence model:
 
 1. if a script name matches a `RegEx` or `String` from the `sync` option, it will have no attribute;
@@ -58,4 +65,50 @@ plugins: [
 ]  
 ```
 
+All scripts set to `async` except 'first.js' which is sync:
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    sync: ['first.js'],
+    defaultAttribute: 'async'
+  })
+]  
+```
+
+All scripts with 'important' in their name are sync and all others set to `defer`:
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    sync: ['important'],
+    defaultAttribute: 'defer'
+  })
+]  
+```
+
+Alternatively, using a regular expression:
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    sync: [/important/],
+    defaultAttribute: 'defer'
+  })
+]  
+```
+
+And so on, to craziness:
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    sync: [/imp(1|2){1,3}}/, 'initial'],
+    defer: ['slow', /big.*andslow/],
+    defaultAttribute: 'async'
+  })
+]  
+```
+
+Any problems with real-world examples, just raise an issue.  
 
