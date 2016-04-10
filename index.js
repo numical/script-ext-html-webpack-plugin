@@ -8,7 +8,7 @@ const DEFAULT_OPTIONS = {
   defer: [],
   defaultAttribute: SYNC
 };
-const SCRIPT_PATTERN = new RegExp('(<script.*><\/script>)', 'gi');
+const SCRIPT_PATTERN = new RegExp('(<script.*?><\/script>)', 'gi');
 const SRC_PATTERN = new RegExp('src="(.*)"', 'i');
 
 class ScriptExtHtmlWebpackPlugin {

@@ -1,3 +1,4 @@
 'use strict';
 
-module.exports = 'script2';
+require('./chunk2.js');
+require('./index2.js');

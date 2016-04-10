@@ -50,7 +50,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
 
   it('does nothing with default settings', function (done) {
     testPlugin(
-      { entry: path.join(__dirname, 'fixtures/one_script.js'),
+      { entry: path.join(__dirname, 'fixtures/script1.js'),
         output: {
           path: OUTPUT_DIR,
           filename: 'index_bundle.js'
@@ -66,7 +66,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
 
   it('sets async default for single script', function (done) {
     testPlugin(
-      { entry: path.join(__dirname, 'fixtures/one_script.js'),
+      { entry: path.join(__dirname, 'fixtures/script1.js'),
         output: {
           path: OUTPUT_DIR,
           filename: 'index_bundle.js'
@@ -84,7 +84,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
 
   it('sets defer default for single script', function (done) {
     testPlugin(
-      { entry: path.join(__dirname, 'fixtures/one_script.js'),
+      { entry: path.join(__dirname, 'fixtures/script1.js'),
         output: {
           path: OUTPUT_DIR,
           filename: 'index_bundle.js'
@@ -97,6 +97,33 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [/(<script src="index_bundle.js" defer><\/script>)/],
+      done);
+  });
+
+  it('sets async default for multiple scripts', function (done) {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name]_bundle.js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            defaultAttribute: 'async'
+          })
+        ]
+      },
+      [
+        /(<script src="a_bundle.js" async><\/script>)/,
+        /(<script src="b_bundle.js" async><\/script>)/,
+        /(<script src="c_bundle.js" async><\/script>)/
+      ],
       done);
   });
 });

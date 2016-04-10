@@ -36,10 +36,14 @@ attribute.  Default value of the option is an empty array.
 - `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute. Default value of the option is `'sync'`.
 
 In more complicated use cases it may prove difficult to ensure that the pattern matching for different attributes are mutually exclusive.  To prevent confusion, the plugin operates a simple precedence model:
+
 1. if a script name matches a `RegEx` or `String` from the `sync` option, it will have no attribute;
+
 2. if a script name matches a `Regex` or `String` from the `async` option, it will have the `async` attribute, *unless* it matched condition 1;
+
 3. if a script name matches a `Regex` or `String` from the `defer` option, it will have the `defer`
    attribute, *unless* it matched conditions 1 or 2;
+
 4. if a script name does not match any of the previous conditions, it will have the `defaultAttribute' attribute.
 
 Some examples:
