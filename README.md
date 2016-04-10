@@ -29,31 +29,7 @@ plugins: [
   new ScriptExtHtmlWebpackPlugin()
 ]  
 ```
-
-Configuration
--------------
-The above configuration will actually do nothing due to the configuration defaults.
-You must pass a hash of configuration options to the plugin to cause the addition of attributes:
-- `sync`: array of `String`'s and/or `RegExp`'s defining scripts that should have no
-attribute.  Default value of the option is an empty array.
-- `async`: array of `String`'s and/or `RegExp`'s defining scripts that should have an `async` attribute.  Default value of the option is an empty array.
-- `defer`: array of `String`'s and/or `RegExp`'s defining scripts that should have a `defer` attribute.  Default value of the option is an empty array.
-- `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute. Default value of the option is `'sync'`.
-
-In the arrays a `String` value matches if it is a substring of the script name.
-
-In more complicated use cases it may prove difficult to ensure that the pattern matching for different attributes are mutually exclusive.  To prevent confusion, the plugin operates a simple precedence model:
-
-1. if a script name matches a `RegEx` or `String` from the `sync` option, it will have no attribute;
-
-2. if a script name matches a `Regex` or `String` from the `async` option, it will have the `async` attribute, *unless* it matched condition 1;
-
-3. if a script name matches a `Regex` or `String` from the `defer` option, it will have the `defer`
-   attribute, *unless* it matched conditions 1 or 2;
-
-4. if a script name does not match any of the previous conditions, it will have the `defaultAttribute' attribute.
-
-Some examples:
+The above configuration will actually do nothing due to the configuration defaults. Some more useful scenarios:
 
 All scripts set to `async`:
 ```javascript
@@ -75,6 +51,31 @@ plugins: [
   })
 ]  
 ```
+
+Configuration offers much more complex options:
+
+Configuration
+-------------
+You must pass a hash of configuration options to the plugin to cause the addition of attributes:
+- `sync`: array of `String`'s and/or `RegExp`'s defining script names that should have no attribute (default: `[]`);
+- `async`: array of `String`'s and/or `RegExp`'s defining script names that should have an `async` attribute (default: `[]`);
+- `defer`: array of `String`'s and/or `RegExp`'s defining script names that should have a `defer` attribute (default: `[]`);
+- `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute (default: `'sync'`).
+
+In the arrays a `String` value matches if it is a substring of the script name.
+
+In more complicated use cases it may prove difficult to ensure that the pattern matching for different attributes are mutually exclusive.  To prevent confusion, the plugin operates a simple precedence model:
+
+1. if a script name matches a `RegEx` or `String` from the `sync` option, it will have no attribute;
+
+2. if a script name matches a `Regex` or `String` from the `async` option, it will have the `async` attribute, *unless* it matched condition 1;
+
+3. if a script name matches a `Regex` or `String` from the `defer` option, it will have the `defer`
+   attribute, *unless* it matched conditions 1 or 2;
+
+4. if a script name does not match any of the previous conditions, it will have the `defaultAttribute' attribute.
+
+Some examples:
 
 All scripts with 'important' in their name are sync and all others set to `defer`:
 ```javascript
