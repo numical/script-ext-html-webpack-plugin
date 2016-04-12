@@ -294,4 +294,61 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
       ],
       done);
   });
+
+  it('module attribute selectively added', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            module: ['b'],
+            defaultAttribute: 'async'
+          })
+        ]
+      },
+      [
+        /(<script src="a.js" async><\/script>)/,
+        /(<script src="b.js" async type="module"><\/script>)/,
+        /(<script src="c.js" async><\/script>)/
+      ],
+      done);
+  });
+
+  it('module attribute independent of other attributes', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            async: ['b'],
+            defer: [/(a|b)/],
+            module: ['b', 'c']
+          })
+        ]
+      },
+      [
+        /(<script src="a.js" defer><\/script>)/,
+        /(<script src="b.js" async type="module"><\/script>)/,
+        /(<script src="c.js" type="module"><\/script>)/
+      ],
+      done);
+  });
 });

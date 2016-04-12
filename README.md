@@ -6,7 +6,7 @@ Script Extension for HTML Webpack Plugin
 
 
 Enhances [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin)
-functionality with `async` and `defer` attributes for `<script>` elements. 
+functionality with `async`,`defer` and `type="module"` attributes for `<script>` elements. 
 
 This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
 
@@ -60,7 +60,9 @@ You must pass a hash of configuration options to the plugin to cause the additio
 - `sync`: array of `String`'s and/or `RegExp`'s defining script names that should have no attribute (default: `[]`);
 - `async`: array of `String`'s and/or `RegExp`'s defining script names that should have an `async` attribute (default: `[]`);
 - `defer`: array of `String`'s and/or `RegExp`'s defining script names that should have a `defer` attribute (default: `[]`);
-- `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute (default: `'sync'`).
+- `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute (default: `'sync'`);
+- `module`: array of `String`'s and/or `RegExp`'s defining script names that should have a
+`type="module"` attribute (default: `[]`).
 
 In the arrays a `String` value matches if it is a substring of the script name.
 
@@ -74,6 +76,8 @@ In more complicated use cases it may prove difficult to ensure that the pattern 
    attribute, *unless* it matched conditions 1 or 2;
 
 4. if a script name does not match any of the previous conditions, it will have the `defaultAttribute' attribute.
+
+The `module` attribute is independent of these rules.
 
 Some Examples:
 
@@ -99,6 +103,17 @@ plugins: [
 ]  
 ```
 
+All scripts with 'mod' in their name are async and type 'module', all others are sync (no explicit setting for this as it is the default):
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    async: ['mod'],
+    module: ['mod']
+  })
+]  
+```
+
 And so on, to craziness:
 ```javascript
 plugins: [
@@ -106,6 +121,7 @@ plugins: [
   new ScriptExtHtmlWebpackPlugin({
     sync: [/imp(1|2){1,3}}/, 'initial'],
     defer: ['slow', /big.*andslow/],
+    module: [/^((?!sync).)*/, 'mod']
     defaultAttribute: 'async'
   })
 ]  
