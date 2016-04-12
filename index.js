@@ -29,7 +29,7 @@ class ScriptExtHtmlWebpackPlugin {
     if (this.options.defaultAttribute === SYNC &&
         this.options.async.length === 0 &&
         this.options.defer.length === 0) {
-      return callback();
+      return callback(null, htmlPluginData);
     }
     if (ATTRIBUTE_PRIORITIES.indexOf(this.options.defaultAttribute) < 0) {
       throw new Error('ScriptExtHtmlWebpackPlugin: invalid default attribute');
@@ -39,7 +39,7 @@ class ScriptExtHtmlWebpackPlugin {
       const attribute = this.generateScriptAttribute(scriptName);
       return '<script src="' + scriptName + '"' + attribute + '></script>';
     });
-    callback();
+    callback(null, htmlPluginData);
   }
 
   generateScriptAttribute (scriptName) {

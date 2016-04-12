@@ -12,6 +12,7 @@ const webpack = require('webpack');
 const rm_rf = require('rimraf');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
+const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 
 const OUTPUT_DIR = path.join(__dirname, '../dist');
 
@@ -263,6 +264,33 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         /(<script src="a.js" async><\/script>)/,
         /(<script src="b.js" async><\/script>)/,
         /(<script src="c.js" async><\/script>)/
+      ],
+      done);
+  });
+
+  it('plays happily with other plugins on the same tml plugin event', (done) => {
+    testPlugin(
+      { entry: path.join(__dirname, 'fixtures/script1_with_style.js'),
+        output: {
+          path: OUTPUT_DIR,
+          filename: 'index_bundle.js'
+        },
+        module: {
+          loaders: [
+            {test: /\.css$/, loader: StyleExtHtmlWebpackPlugin.inline()}
+          ]
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            defaultAttribute: 'async'
+          }),
+          new StyleExtHtmlWebpackPlugin()
+        ]
+      },
+      [
+        /(<script src="index_bundle.js" async><\/script>)/,
+        /<style>[\s\S]*background: snow;[\s\S]*<\/style>/
       ],
       done);
   });

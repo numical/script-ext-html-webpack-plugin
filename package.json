@@ -34,6 +34,7 @@
     "jasmine": "^2.4.1",
     "rimraf": "^2.5.2",
     "semistandard": "^7.0.5",
+    "style-ext-html-webpack-plugin": "^1.0.1",
     "webpack": "^1.12.14"
   }
 }
