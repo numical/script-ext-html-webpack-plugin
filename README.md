@@ -173,3 +173,4 @@ plugins: [
 ]
 ```
 * If webpack processing actually errors, first try adding the configuration option `removeInlinedAssets: false`.  This is a development flag intended to mitigate one risky aspect of the implementation.  Again, feedback on this would be much appreciated.
+* An alternative approach, based on jade templates is illustrated in the [HtmlWebpackPlugin inline example](https://github.com/ampedandwired/html-webpack-plugin/tree/master/examples/inline).
