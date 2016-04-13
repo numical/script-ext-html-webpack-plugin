@@ -15,7 +15,7 @@ const DEFAULT_OPTIONS = {
 };
 const SCRIPT_PATTERN = new RegExp('(<script.*?><\/script>)', 'gi');
 const SRC_PATTERN = new RegExp('src="(.*)"', 'i');
-const JS_PATTERN = /.css?/;
+const JS_PATTERN = /\.js$/;
 
 function shouldReplaceScriptElements (options) {
   if (ATTRIBUTE_PRIORITIES.indexOf(options.defaultAttribute) < 0) {
