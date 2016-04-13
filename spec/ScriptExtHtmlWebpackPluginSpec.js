@@ -351,4 +351,60 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
       ],
       done);
   });
+
+  it('inlining works for single script', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          b: path.join(__dirname, 'fixtures/script2.js'),
+          c: path.join(__dirname, 'fixtures/script3.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            inline: ['b'],
+            defaultAttribute: 'async'
+          })
+        ]
+      },
+      [
+        /(<script src="a.js" async><\/script>)/,
+        /(<script>[\s\S]*<\/script>)/,
+        /(<script src="c.js" async><\/script>)/
+      ],
+      done);
+  });
+
+  it('inlining works for multiple minified scripts', (done) => {
+    testPlugin(
+      {
+        entry: {
+          a: path.join(__dirname, 'fixtures/script1.js'),
+          simple1: path.join(__dirname, 'fixtures/simplescript1.js'),
+          simple2: path.join(__dirname, 'fixtures/simplescript2.js')
+        },
+        output: {
+          path: OUTPUT_DIR,
+          filename: '[name].js'
+        },
+        plugins: [
+          new webpack.optimize.UglifyJsPlugin(),
+          new HtmlWebpackPlugin(),
+          new ScriptExtHtmlWebpackPlugin({
+            inline: [/sim/]
+          })
+        ]
+      },
+      [
+        /(<script src="a.js"><\/script>)/,
+        /(<script>.*console\.log\("it works!"\).*<\/script>)/,
+        /(<script>.*Date\.now\(\).*<\/script>)/
+      ],
+      done);
+  });
 });
