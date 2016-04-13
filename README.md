@@ -152,15 +152,24 @@ Any problems with real-world examples, just raise an issue.
 
 Inlining
 --------
-The inlining feature is **experimental** as of v1.2.0.
+Inlining javascript in `<script>` tags was introduced in v1.2.0 and is currently considered **experimental**.
 
-It has not been tested against more complex use cases and feedback/issues would be much appreciated.
+It has not been tested against complex use cases and feedback/issues would be much appreciated.
 
-If webpack processing actually errors, first try adding the configuration option `removeInlinedAssets: false`.  This is a development flag intended to mitigate one risky aspect of the implmentation.  Again, feedback on this would be much appreciated.
-
-######Notes:
-* Even the simplest script will be wrapped with webpack boilerplate; ensure you minify your
-javascript if you want your output html to be legible!
-* This inlining feature is for `<script>`'s only. If you wish to inline css please see
-the sister plugin
+Several notes and caveats apply:
+* This feature is for `<script>`'s only. If you wish to inline css please see the sister plugin
 [style-ext-html-webpack-plugin](https://github.com/numical/style-ext-html-webpack-plugin).
+* Even the simplest script will be wrapped with webpack boilerplate; ensure you minify your javascript if you want your output html to be legible!
+* Due to webpack [issue 367](https://github.com/webpack/webpack-dev-server/issues/367), inlined scripts will fail to run on `webpack-dev-server` if the `--inline` option is used.  To work around this either use [Iframe mode](https://webpack.github.io/docs/webpack-dev-server.html)  or  roll your 'webpack-dev-server' version back to v1.4.0.
+* Hot replacement of inlined scripts will only work if caching is [switched off](https://github.com/ampedandwired/html-webpack-plugin#configuration) for html-webpack-plugin:
+```javascript
+plugins: [
+    new HtmlWebpackPlugin({
+      cache: false
+    }),
+    new ScriptExtHtmlWebpackPlugin({
+      inline: ['myinlinedscript.js']
+    })
+]
+```
+* If webpack processing actually errors, first try adding the configuration option `removeInlinedAssets: false`.  This is a development flag intended to mitigate one risky aspect of the implementation.  Again, feedback on this would be much appreciated.
