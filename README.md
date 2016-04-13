@@ -19,6 +19,8 @@ webpack-generated javascipt as synchronous`<script>` elements in the generated h
 
 Installation
 ------------
+You must be running webpack on node 4.x or v5.x.
+
 Install the plugin with npm:
 ```shell
 $ npm install --save-dev script-ext-html-webpack-plugin
@@ -156,6 +158,9 @@ It has not been tested against more complex use cases and feedback/issues would 
 
 If webpack processing actually errors, first try adding the configuration option `removeInlinedAssets: false`.  This is a development flag intended to mitigate one risky aspect of the implmentation.  Again, feedback on this would be much appreciated.
 
-Finally note that this inling feature is for `<script>`'s only. If you wish to inline css please see
+######Notes:
+* Even the simplest script will be wrapped with webpack boilerplate; ensure you minify your
+javascript if you want your output html to be legible!
+* This inlining feature is for `<script>`'s only. If you wish to inline css please see
 the sister plugin
-[style-ext-html-webpack-plugin](https://github.com/numical/style-ext-html-webpack-plugin)
+[style-ext-html-webpack-plugin](https://github.com/numical/style-ext-html-webpack-plugin).
