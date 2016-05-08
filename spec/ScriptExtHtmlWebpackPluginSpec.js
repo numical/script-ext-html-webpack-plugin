@@ -76,7 +76,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
           })
         ]
       },
-      [/(<script src="index_bundle.js" async><\/script>)/],
+      [/(<script src="index_bundle.js" type="text\/javascript" async><\/script>)/],
       done);
   });
 
@@ -94,7 +94,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
           })
         ]
       },
-      [/(<script src="index_bundle.js" defer><\/script>)/],
+      [/(<script src="index_bundle.js" type="text\/javascript" defer><\/script>)/],
       done);
   });
 
@@ -118,9 +118,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js" async><\/script>)/,
-        /(<script src="b.js" async><\/script>)/,
-        /(<script src="c.js" async><\/script>)/
+        /(<script src="a.js" type="text\/javascript" async><\/script>)/,
+        /(<script src="b.js" type="text\/javascript" async><\/script>)/,
+        /(<script src="c.js" type="text\/javascript" async><\/script>)/
       ],
       done);
   });
@@ -145,9 +145,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js" async><\/script>)/,
-        /(<script src="b.js" async><\/script>)/,
-        /(<script src="c.js"><\/script>)/
+        /(<script src="a.js" type="text\/javascript" async><\/script>)/,
+        /(<script src="b.js" type="text\/javascript" async><\/script>)/,
+        /(<script src="c.js" type="text\/javascript"><\/script>)/
       ],
       done);
   });
@@ -174,9 +174,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js"><\/script>)/,
-        /(<script src="b.js" defer><\/script>)/,
-        /(<script src="c.js" async><\/script>)/
+        /(<script src="a.js" type="text\/javascript"><\/script>)/,
+        /(<script src="b.js" type="text\/javascript" defer><\/script>)/,
+        /(<script src="c.js" type="text\/javascript" async><\/script>)/
       ],
       done);
   });
@@ -202,9 +202,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js" defer><\/script>)/,
-        /(<script src="b.js" defer><\/script>)/,
-        /(<script src="c.js"><\/script>)/
+        /(<script src="a.js" type="text\/javascript" defer><\/script>)/,
+        /(<script src="b.js" type="text\/javascript" defer><\/script>)/,
+        /(<script src="c.js" type="text\/javascript"><\/script>)/
       ],
       done);
   });
@@ -232,9 +232,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js"><\/script>)/,
-        /(<script src="b.js" defer><\/script>)/,
-        /(<script src="c.js"><\/script>)/
+        /(<script src="a.js" type="text\/javascript"><\/script>)/,
+        /(<script src="b.js" type="text\/javascript" defer><\/script>)/,
+        /(<script src="c.js" type="text\/javascript"><\/script>)/
       ],
     done);
   });
@@ -261,9 +261,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js" async><\/script>)/,
-        /(<script src="b.js" async><\/script>)/,
-        /(<script src="c.js" async><\/script>)/
+        /(<script src="a.js" type="text\/javascript" async><\/script>)/,
+        /(<script src="b.js" type="text\/javascript" async><\/script>)/,
+        /(<script src="c.js" type="text\/javascript" async><\/script>)/
       ],
       done);
   });
@@ -289,7 +289,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="index_bundle.js" async><\/script>)/,
+        /(<script src="index_bundle.js" type="text\/javascript" async><\/script>)/,
         /<style>[\s\S]*background: snow;[\s\S]*<\/style>/
       ],
       done);
@@ -316,9 +316,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js" async><\/script>)/,
+        /(<script src="a.js" type="text\/javascript" async><\/script>)/,
         /(<script src="b.js" async type="module"><\/script>)/,
-        /(<script src="c.js" async><\/script>)/
+        /(<script src="c.js" type="text\/javascript" async><\/script>)/
       ],
       done);
   });
@@ -345,7 +345,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js" defer><\/script>)/,
+        /(<script src="a.js" type="text\/javascript" defer><\/script>)/,
         /(<script src="b.js" async type="module"><\/script>)/,
         /(<script src="c.js" type="module"><\/script>)/
       ],
@@ -373,9 +373,9 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js" async><\/script>)/,
+        /(<script src="a.js" type="text\/javascript" async><\/script>)/,
         /(<script>[\s\S]*<\/script>)/,
-        /(<script src="c.js" async><\/script>)/
+        /(<script src="c.js" type="text\/javascript" async><\/script>)/
       ],
       done);
   });
@@ -401,7 +401,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
         ]
       },
       [
-        /(<script src="a.js"><\/script>)/,
+        /(<script src="a.js" type="text\/javascript"><\/script>)/,
         /(<script>.*console\.log\("it works!"\).*<\/script>)/,
         /(<script>.*Date\.now\(\).*<\/script>)/
       ],

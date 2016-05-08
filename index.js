@@ -71,6 +71,8 @@ function generateSrcScriptElement (options, scriptName) {
   }
   if (matches(scriptName, options[MODULE])) {
     scriptAttributes = scriptAttributes + ' type="module"';
+  } else {
+    scriptAttributes = ' type="text/javascript"' + scriptAttributes;
   }
   return '<script src="' + scriptName + '"' + scriptAttributes + '></script>';
 }

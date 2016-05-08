@@ -10,12 +10,12 @@ functionality with different deployment options for your scripts including:
 - [`async`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
 - [`defer`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
 - [`type="module"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
-- inlining (**experimental**).
+- inlining
 
 This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
 
 The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) incorporates all
-webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to add attributes to these elements or even to inline the code in the element (**experimental**).
+webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to add attributes to these elements or even to inline the code in the element.
 
 Installation
 ------------
@@ -25,6 +25,7 @@ Install the plugin with npm:
 ```shell
 $ npm install --save-dev script-ext-html-webpack-plugin
 ```
+
 
 Basic Usage
 -----------
@@ -64,7 +65,7 @@ Configuration offers much more complex options:
 Configuration
 -------------
 You must pass a hash of configuration options to the plugin to cause the addition of attributes:
-- `inline`: array of `String`'s and/or `RegExp`'s defining scripts that should be inlined in the html (default: `[]`)(**experimental**);
+- `inline`: array of `String`'s and/or `RegExp`'s defining scripts that should be inlined in the html (default: `[]`);
 - `sync`: array of `String`'s and/or `RegExp`'s defining script names that should have no attribute (default: `[]`);
 - `async`: array of `String`'s and/or `RegExp`'s defining script names that should have an `async` attribute (default: `[]`);
 - `defer`: array of `String`'s and/or `RegExp`'s defining script names that should have a `defer` attribute (default: `[]`);
@@ -76,7 +77,7 @@ In the arrays a `String` value matches if it is a substring of the script name.
 
 In more complicated use cases it may prove difficult to ensure that the pattern matching for different attributes are mutually exclusive.  To prevent confusion, the plugin operates a simple precedence model:
 
-1. if a script name matches a `RegEx` or `String` from the `inline` option, it will be inlined (**experimental**);
+1. if a script name matches a `RegEx` or `String` from the `inline` option, it will be inlined;
 
 2. if a script name matches a `Regex` or `String` from the `sync` option, it will have no attribute, *unless* it matched condition 1;
 
@@ -152,10 +153,6 @@ Any problems with real-world examples, just raise an issue.
 
 Inlining
 --------
-Inlining javascript in `<script>` tags was introduced in v1.2.0 and is currently considered **experimental**.
-
-It has not been tested against complex use cases and feedback/issues would be much appreciated.
-
 Several notes and caveats apply:
 * This feature is for `<script>`'s only. If you wish to inline css please see the sister plugin
 [style-ext-html-webpack-plugin](https://github.com/numical/style-ext-html-webpack-plugin).
@@ -174,3 +171,20 @@ plugins: [
 ```
 * If webpack processing actually errors, first try adding the configuration option `removeInlinedAssets: false`.  This is a development flag intended to mitigate one risky aspect of the implementation.  Again, feedback on this would be much appreciated.
 * An alternative approach, based on jade templates is illustrated in the [HtmlWebpackPlugin inline example](https://github.com/ampedandwired/html-webpack-plugin/tree/master/examples/inline).
+
+
+Change History
+--------------
+
+v1.3.x
+* added `type="text/javascript"` by default, in response to [Safari 9.1.1 bug](https://github.com/ampedandwired/html-webpack-plugin/issues/309)
+* removed experimental status of inline option
+
+v1.2.x
+* added inline option
+
+v1.1.x
+* added `type="module"` option
+
+v1.0.x
+* initial release
