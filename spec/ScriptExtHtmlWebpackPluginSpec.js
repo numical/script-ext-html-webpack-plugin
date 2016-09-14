@@ -58,7 +58,7 @@ describe('ScriptExtHtmlWebpackPlugin', function () {
           new ScriptExtHtmlWebpackPlugin()
         ]
       },
-      [/(<script src="index_bundle.js"><\/script>)/],
+      [/(<script type="text\/javascript" src="index_bundle.js"><\/script>)/],
       done);
   });
 
