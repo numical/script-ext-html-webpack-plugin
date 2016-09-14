@@ -19,7 +19,7 @@ webpack-generated javascipt as synchronous`<script>` elements in the generated h
 
 Installation
 ------------
-You must be running webpack on node 4.x or v5.x.
+You must be running webpack on node 4+.
 
 Install the plugin with npm:
 ```shell
