@@ -26,6 +26,12 @@ Install the plugin with npm:
 $ npm install --save-dev script-ext-html-webpack-plugin
 ```
 
+Note: you may see the following warning:
+```shell```
+npm WARN html-webpack-plugin@2.22.0 requires a peer of webpack ...  but none was installed.
+```
+This is fine - for testing, we dynamically download multiple version of webpack (via the [dynavers](https://github.com/numical/dynavers) module).
+
 
 Basic Usage
 -----------
