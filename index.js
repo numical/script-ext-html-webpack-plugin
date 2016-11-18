@@ -13,7 +13,7 @@ const DEFAULT_OPTIONS = {
   module: [],
   removeInlinedAssets: true
 };
-const SCRIPT_PATTERN = new RegExp('(<script.*?><\/script>)', 'gi');
+const SCRIPT_PATTERN = new RegExp('(<script.*?></script>)', 'gi');
 const SRC_PATTERN = new RegExp('src="(.*)"', 'i');
 const JS_PATTERN = /\.js$/;
 

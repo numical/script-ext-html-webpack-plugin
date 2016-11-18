@@ -7,7 +7,7 @@
     "index.js"
   ],
   "scripts": {
-    "pretest": "semistandard",
+    "pretest": "semistandard & install-module-versions dynavers.json",
     "test": "jasmine",
     "debug": "node-debug jasmine"
   },
@@ -30,11 +30,16 @@
   },
   "homepage": "https://github.com/numical/script-ext-html-webpack-plugin",
   "devDependencies": {
-    "html-webpack-plugin": "^2.12.0",
-    "jasmine": "2.4.1",
-    "rimraf": "^2.5.2",
-    "semistandard": "^7.0.5",
-    "style-ext-html-webpack-plugin": "^2.0.3",
-    "webpack": "^1.12.14"
+    "dynavers": "^0.2.0",
+    "html-webpack-plugin": "^2.24.1",
+    "jasmine": "^2.5.2",
+    "jasmine-spec-reporter": "^2.7.0",
+    "jasmine2-custom-message": "^0.8.2",
+    "rimraf": "^2.5.4",
+    "semistandard": "^9.1.0",
+    "style-ext-html-webpack-plugin": "^2.0.5"
+  },
+  "peerDependencies": {
+    "webpack": "1 || ^2.1.0-beta"
   }
 }

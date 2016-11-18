@@ -1,3 +1,4 @@
 /node_modules/
+/dynavers_modules/
 /dist/
 npm-debug.log

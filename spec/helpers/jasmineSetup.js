@@ -1,0 +1,11 @@
+/* eslint-env jasmine */
+'use strict';
+
+// for debugging
+if (typeof v8debug === 'object') {
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
+}
+
+require('jasmine2-custom-message');
+const SpecReporter = require('jasmine-spec-reporter');
+jasmine.getEnv().addReporter(new SpecReporter());
