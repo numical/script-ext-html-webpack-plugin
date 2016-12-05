@@ -2,7 +2,7 @@
 'use strict';
 
 // for debugging
-if (typeof v8debug === 'object') {
+if (process.env.DEBUG) {
   jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000;
 }
 

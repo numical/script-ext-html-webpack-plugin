@@ -1,6 +1,7 @@
 {
   "path": "dynavers_modules",
   "versions": {
-    "webpack" : ["1.13.3", "2.1.0-beta.27"]
+    "webpack" : ["1.13.3", "2.1.0-beta.27"],
+    "extract-text-webpack-plugin" : ["1.0.1", "2.0.0-beta.4"]
   }
 }

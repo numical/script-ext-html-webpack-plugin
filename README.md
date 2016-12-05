@@ -14,8 +14,7 @@ functionality with different deployment options for your scripts including:
 
 This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
 
-The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) incorporates all
-webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to add attributes to these elements or even to inline the code in the element.
+The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) incorporates all webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to add attributes to these elements or even to inline the code in the element.
 
 Installation
 ------------
@@ -26,11 +25,9 @@ Install the plugin with npm:
 $ npm install --save-dev script-ext-html-webpack-plugin
 ```
 
-Note: you may see the following warning:
-```shell```
-npm WARN html-webpack-plugin@2.22.0 requires a peer of webpack ...  but none was installed.
-```
-This is fine - for testing, we dynamically download multiple version of webpack (via the [dynavers](https://github.com/numical/dynavers) module).
+You may see an `UNMET PEER DEPENDENCY` warning for webpack.
+
+This is fine; in testing, we dynamically download multiple versions of webpack (via the [dynavers](https://github.com/numical/dynavers) module).
 
 
 Basic Usage
@@ -157,13 +154,36 @@ plugins: [
 
 Any problems with real-world examples, just raise an issue.  
 
+
+A Note on Script Names
+----------------------
+In the above examples the actual script names are used to select the deployment option.  You may not wish to couple asset names to your deployment like this.  Instead you can use [Webpack's entry configuration](https://webpack.js.org/concepts/entry-points/#object-syntax) to create aliases that the plugin will then use for its pattern matching. Your `webpack.config.js` will look something like this:
+```javascript
+entry: {
+  a: path.join(__dirname, 'lib/myFunctions.js'),
+  b: path.join(__dirname, 'lib/otherFunctions.js'),
+  c: path.join(__dirname, 'lib/criticalFuntions.js')
+},
+output: {
+  ...
+  filename: '[name].js'
+}
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    inline: ['c'],  
+    defer: ['a', 'b']
+  })
+]  
+```
+
+
 Inlining
 --------
 Several notes and caveats apply:
 * This feature is for `<script>`'s only. If you wish to inline css please see the sister plugin
 [style-ext-html-webpack-plugin](https://github.com/numical/style-ext-html-webpack-plugin).
 * Even the simplest script will be wrapped with webpack boilerplate; ensure you minify your javascript if you want your output html to be legible!
-* Due to webpack [issue 367](https://github.com/webpack/webpack-dev-server/issues/367), inlined scripts will fail to run on `webpack-dev-server` if the `--inline` option is used.  To work around this either use [Iframe mode](https://webpack.github.io/docs/webpack-dev-server.html)  or  roll your 'webpack-dev-server' version back to v1.4.0.
 * Hot replacement of inlined scripts will only work if caching is [switched off](https://github.com/ampedandwired/html-webpack-plugin#configuration) for html-webpack-plugin:
 ```javascript
 plugins: [
@@ -175,12 +195,15 @@ plugins: [
     })
 ]
 ```
-* If webpack processing actually errors, first try adding the configuration option `removeInlinedAssets: false`.  This is a development flag intended to mitigate one risky aspect of the implementation.  Again, feedback on this would be much appreciated.
 * An alternative approach, based on jade templates is illustrated in the [HtmlWebpackPlugin inline example](https://github.com/ampedandwired/html-webpack-plugin/tree/master/examples/inline).
 
 
 Change History
 --------------
+
+v1.4.x
+* updated internal mechanism to use new(ish) [HtmlWebpackPlugin event](https://github.com/ampedandwired/html-webpack-plugin#events)
+* improved test mechanism and enhanced test coverage
 
 v1.3.x
 * added `type="text/javascript"` by default, in response to [Safari 9.1.1 bug](https://github.com/ampedandwired/html-webpack-plugin/issues/309)

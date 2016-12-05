@@ -2,426 +2,336 @@
 'use strict';
 
 const path = require('path');
-const setModuleVersion = require('dynavers')('dynavers.json');
-const fs = require('fs');
 const deleteDir = require('rimraf');
+const version = require('./helpers/versions.js');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('../../html-webpack-plugin/index.js'); // html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
 const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const testPlugin = require('./helpers/core-test.js');
 
-const VERSIONS = require('./helpers/versions');
 const OUTPUT_DIR = path.join(__dirname, '../dist');
 
-function testPlugin (webpack, webpackConfig, expectedResults, done) {
-  const outputFile = 'index.html';
-  webpack(webpackConfig, (err, stats) => {
-    expect(err).toBeFalsy();
-    const compilationErrors = (stats.compilation.errors || []).join('\n');
-    expect(compilationErrors).toBe('');
-    const compilationWarnings = (stats.compilation.warnings || []).join('\n');
-    expect(compilationWarnings).toBe('');
-    const outputFileExists = fs.existsSync(path.join(OUTPUT_DIR, outputFile));
-    expect(outputFileExists).toBe(true);
-    if (!outputFileExists) {
-      return done();
-    }
-    const htmlContent = fs.readFileSync(path.join(OUTPUT_DIR, outputFile)).toString();
-    expectedResults.forEach((expectedResult) => {
-      if (expectedResult instanceof RegExp) {
-        expect(htmlContent).toMatch(expectedResult);
-      } else {
-        expect(htmlContent).toContain(expectedResult);
-      }
-    });
-    done();
-  });
-}
+const baseConfig = (scriptExtOptions, outputFilename) => {
+  outputFilename = outputFilename || '[name].js';
+  return {
+    entry: {
+      a: path.join(__dirname, 'fixtures/script1.js'),
+      b: path.join(__dirname, 'fixtures/script2.js'),
+      c: path.join(__dirname, 'fixtures/script3.js')
+    },
+    output: {
+      path: OUTPUT_DIR,
+      filename: outputFilename
+    },
+    plugins: [
+      new HtmlWebpackPlugin(),
+      new ScriptExtHtmlWebpackPlugin(scriptExtOptions)
+    ]
+  };
+};
 
-describe('Core functionality: ', function () {
+const baseExpectations = () => ({
+  html: [],
+  js: [],
+  files: [],
+  not: {
+    html: [],
+    js: [],
+    files: []
+  }
+});
+
+describe(`Core functionality (webpack ${version.webpack})`, function () {
   beforeEach((done) => {
     deleteDir(OUTPUT_DIR, done);
   });
 
-  VERSIONS.forEach(version => {
-    setModuleVersion('webpack', version.webpack, true);
-    var webpack = require('webpack');
-    var HtmlWebpackPlugin = require('html-webpack-plugin');
+  it('does nothing with default settings', (done) => {
+    const config = baseConfig({}, 'index_bundle.js');
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js"><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-    describe('Webpack v' + version.webpack + ':', () => {
-      it('does nothing with default settings', (done) => {
-        testPlugin(
-            webpack,
-            { entry: path.join(__dirname, 'fixtures/script1.js'),
-              output: {
-                path: OUTPUT_DIR,
-                filename: 'index_bundle.js'
-              },
-              plugins: [
-                new HtmlWebpackPlugin(),
-                new ScriptExtHtmlWebpackPlugin()
-              ]
-            },
-            [/(<script type="text\/javascript" src="index_bundle.js"><\/script>)/],
-            done);
-      });
+  it('sets async default for single script', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async'
+      },
+        'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('sets async default for single script', (done) => {
-        testPlugin(
-            webpack,
-            { entry: path.join(__dirname, 'fixtures/script1.js'),
-              output: {
-                path: OUTPUT_DIR,
-                filename: 'index_bundle.js'
-              },
-              plugins: [
-                new HtmlWebpackPlugin(),
-                new ScriptExtHtmlWebpackPlugin({
-                  defaultAttribute: 'async'
-                })
-              ]
-            },
-            [/(<script src="index_bundle.js" type="text\/javascript" async><\/script>)/],
-            done);
-      });
+  it('sets defer default for single script', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'defer'
+      },
+        'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js" defer><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('sets defer default for single script', (done) => {
-        testPlugin(
-            webpack,
-            { entry: path.join(__dirname, 'fixtures/script1.js'),
-              output: {
-                path: OUTPUT_DIR,
-                filename: 'index_bundle.js'
-              },
-              plugins: [
-                new HtmlWebpackPlugin(),
-                new ScriptExtHtmlWebpackPlugin({
-                  defaultAttribute: 'defer'
-                })
-              ]
-            },
-            [/(<script src="index_bundle.js" type="text\/javascript" defer><\/script>)/],
-            done);
-      });
+  it('sets async default for multiple scripts', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('sets async default for multiple scripts', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                defaultAttribute: 'async'
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript" async><\/script>)/,
-            /(<script src="b.js" type="text\/javascript" async><\/script>)/,
-            /(<script src="c.js" type="text\/javascript" async><\/script>)/
-          ],
-          done);
-      });
+  it('async string exceptions and sync default', (done) => {
+    const config = baseConfig(
+      {
+        async: ['a', 'b']
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="c.js"><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('async string exceptions and sync default', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                async: ['a', 'b']
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript" async><\/script>)/,
-            /(<script src="b.js" type="text\/javascript" async><\/script>)/,
-            /(<script src="c.js" type="text\/javascript"><\/script>)/
-          ],
-          done);
-      });
+  it('sync and defer string exceptions and async default', (done) => {
+    const config = baseConfig(
+      {
+        sync: ['a'],
+        defer: ['b'],
+        defaultAttribute: 'async'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js"><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" defer><\/script>)/,
+      /(<script type="text\/javascript" src="c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('sync and defer string exceptions and async default', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                sync: ['a'],
-                defer: ['b'],
-                defaultAttribute: 'async'
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript"><\/script>)/,
-            /(<script src="b.js" type="text\/javascript" defer><\/script>)/,
-            /(<script src="c.js" type="text\/javascript" async><\/script>)/
-          ],
-          done);
-      });
+  it('defer regex exceptions and sync default', (done) => {
+    const config = baseConfig(
+      {
+        defer: [/(a|b).*/],
+        defaultAttribute: 'sync'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" defer><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" defer><\/script>)/,
+      /(<script type="text\/javascript" src="c.js"><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('defer regex exceptions and sync default', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                defer: [/(a|b).*/],
-                defaultAttribute: 'sync'
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript" defer><\/script>)/,
-            /(<script src="b.js" type="text\/javascript" defer><\/script>)/,
-            /(<script src="c.js" type="text\/javascript"><\/script>)/
-          ],
-          done);
-      });
+  it('sync precedence and defer default', (done) => {
+    const config = baseConfig(
+      {
+        sync: [/(a|c).*/],
+        async: ['c'],
+        defer: [/a.*/],
+        defaultAttribute: 'defer'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js"><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" defer><\/script>)/,
+      /(<script type="text\/javascript" src="c.js"><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('sync precedence and defer default', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                sync: [/(a|c).*/],
-                async: ['c'],
-                defer: [/a.*/],
-                defaultAttribute: 'defer'
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript"><\/script>)/,
-            /(<script src="b.js" type="text\/javascript" defer><\/script>)/,
-            /(<script src="c.js" type="text\/javascript"><\/script>)/
-          ],
-          done);
-      });
+  it('async precedence, mixed strings and regex, sync default', (done) => {
+    const config = baseConfig(
+      {
+        async: [/(a|c).*/, 'b'],
+        defer: [/a.*/],
+        defaultAttribute: 'sync'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('async precedence, mixed strings and regex, sync default', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                async: [/(a|c).*/, 'b'],
-                defer: [/a.*/],
-                defaultAttribute: 'sync'
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript" async><\/script>)/,
-            /(<script src="b.js" type="text\/javascript" async><\/script>)/,
-            /(<script src="c.js" type="text\/javascript" async><\/script>)/
-          ],
-          done);
-      });
+  fit('plays happily with other plugins on the same html plugin event', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async'
+      },
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1_with_style.js');
+    config.plugins.push(new ExtractTextPlugin('styles.css'));
+    config.plugins.push(new StyleExtHtmlWebpackPlugin());
+    config.module = {
+      loaders: [
+        {
+          test: /\.css$/,
+          loader: version.extractTextLoader(ExtractTextPlugin, ['css-loader'])
+        }
+      ]
+    };
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+      /<style>[\s\S]*background: snow;[\s\S]*<\/style>/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('plays happily with other plugins on the same html plugin event', (done) => {
-        testPlugin(
-          webpack,
-          { entry: path.join(__dirname, 'fixtures/script1_with_style.js'),
-            output: {
-              path: OUTPUT_DIR,
-              filename: 'index_bundle.js'
-            },
-            module: {
-              loaders: [
-              {test: /\.css$/, loader: StyleExtHtmlWebpackPlugin.inline()}
-              ]
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                defaultAttribute: 'async'
-              }),
-              new StyleExtHtmlWebpackPlugin()
-            ]
-          },
-          [
-            /(<script src="index_bundle.js" type="text\/javascript" async><\/script>)/,
-            /<style>[\s\S]*background: snow;[\s\S]*<\/style>/
-          ],
-          done);
-      });
+  it('module attribute selectively added', (done) => {
+    const config = baseConfig(
+      {
+        module: ['b'],
+        defaultAttribute: 'async'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" async><\/script>)/,
+      /(<script type="module" src="b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('module attribute selectively added', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                module: ['b'],
-                defaultAttribute: 'async'
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript" async><\/script>)/,
-            /(<script src="b.js" async type="module"><\/script>)/,
-            /(<script src="c.js" type="text\/javascript" async><\/script>)/
-          ],
-          done);
-      });
+  it('module attribute independent of other attributes', (done) => {
+    const config = baseConfig(
+      {
+        async: ['b'],
+        defer: [/(a|b)/],
+        module: ['b', 'c']
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" defer><\/script>)/,
+      /(<script type="module" src="b.js" async><\/script>)/,
+      /(<script type="module" src="c.js"><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('module attribute independent of other attributes', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                async: ['b'],
-                defer: [/(a|b)/],
-                module: ['b', 'c']
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript" defer><\/script>)/,
-            /(<script src="b.js" async type="module"><\/script>)/,
-            /(<script src="c.js" type="module"><\/script>)/
-          ],
-          done);
-      });
+  it('inlining works for single script', (done) => {
+    const config = baseConfig(
+      {
+        inline: ['b'],
+        defaultAttribute: 'async'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" async><\/script>)/,
+      /(<script>[\s\S]*<\/script>)/,
+      /(<script type="text\/javascript" src="c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('inlining works for single script', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              b: path.join(__dirname, 'fixtures/script2.js'),
-              c: path.join(__dirname, 'fixtures/script3.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                inline: ['b'],
-                defaultAttribute: 'async'
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript" async><\/script>)/,
-            /(<script>[\s\S]*<\/script>)/,
-            /(<script src="c.js" type="text\/javascript" async><\/script>)/
-          ],
-          done);
-      });
+  it('works with minimized inlined scripts', done => {
+    const config = baseConfig(
+      {
+        inline: [/sim/]
+      }
+    );
+    config.entry = {
+      a: path.join(__dirname, 'fixtures/script1.js'),
+      simple1: path.join(__dirname, 'fixtures/simplescript1.js'),
+      simple2: path.join(__dirname, 'fixtures/simplescript2.js')
+    };
+    config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js"><\/script>)/,
+      /(<script>.*console\.log\("it works!"\).*<\/script>)/,
+      /(<script>.*Date\.now\(\).*<\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 
-      it('inlining works for multiple minified scripts', (done) => {
-        testPlugin(
-          webpack,
-          {
-            entry: {
-              a: path.join(__dirname, 'fixtures/script1.js'),
-              simple1: path.join(__dirname, 'fixtures/simplescript1.js'),
-              simple2: path.join(__dirname, 'fixtures/simplescript2.js')
-            },
-            output: {
-              path: OUTPUT_DIR,
-              filename: '[name].js'
-            },
-            plugins: [
-              new webpack.optimize.UglifyJsPlugin(),
-              new HtmlWebpackPlugin(),
-              new ScriptExtHtmlWebpackPlugin({
-                inline: [/sim/]
-              })
-            ]
-          },
-          [
-            /(<script src="a.js" type="text\/javascript"><\/script>)/,
-            /(<script>.*console\.log\("it works!"\).*<\/script>)/,
-            /(<script>.*Date\.now\(\).*<\/script>)/
-          ],
-          done);
-      });
-    });
+  it('default attribute works with output.publicPath', done => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async'
+      }
+    );
+    config.output.publicPath = '/subdomain/';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="\/subdomain\/a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('named stylesheets work with output.publicPath', done => {
+    const config = baseConfig(
+      {
+        sync: ['a.js'],
+        async: ['b.js'],
+        defer: ['c.js']
+      }
+    );
+    config.output.publicPath = '/subdomain/';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="\/subdomain\/a.js"><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/c.js" defer><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('muliple merged stylesheets work with output.publicPath', done => {
+    const config = baseConfig(
+      {
+        async: ['main']
+      }
+    );
+    config.entry = [
+      path.join(__dirname, 'fixtures/script1.js'),
+      path.join(__dirname, 'fixtures/script2.js'),
+      path.join(__dirname, 'fixtures/script3.js')
+    ];
+    config.output.publicPath = '/subdomain/';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="\/subdomain\/main.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
   });
 });
