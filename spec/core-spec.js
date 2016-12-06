@@ -186,7 +186,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  fit('plays happily with other plugins on the same html plugin event', (done) => {
+  it('plays happily with other plugins on the same html plugin event', (done) => {
     const config = baseConfig(
       {
         defaultAttribute: 'async'
@@ -331,6 +331,26 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/javascript" src="\/subdomain\/main.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('works with handlebars template <script> elements', done => {
+    const config = baseConfig({}, 'index_bundle.js');
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    config.plugins = [
+      new HtmlWebpackPlugin({
+        template: '!!handlebars-loader!spec/fixtures/handlebars_template.hbs',
+        testMsg: 'Hello World'
+      }),
+      new ScriptExtHtmlWebpackPlugin({
+        defaultAttribute: 'async'
+      })
+    ];
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+      /(<script>[\s\S]*Hello World[\s\S]*<\/script>)/
     ];
     testPlugin(config, expected, done);
   });
