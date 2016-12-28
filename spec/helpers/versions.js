@@ -5,7 +5,7 @@ const webpack1 = {
 };
 
 const webpack2 = {
-  webpack: '2.1.0-beta.27'
+  webpack: '2.2.0-rc.3'
 };
 
 module.exports = [webpack1, webpack2];

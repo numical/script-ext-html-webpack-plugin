@@ -185,6 +185,7 @@ Change History
 v1.3.x
 * added `type="text/javascript"` by default, in response to [Safari 9.1.1 bug](https://github.com/ampedandwired/html-webpack-plugin/issues/309)
 * removed experimental status of inline option
+* added weback 2.2.x beta support
 
 v1.2.x
 * added inline option
