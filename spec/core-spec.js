@@ -6,7 +6,6 @@ const setModuleVersion = require('dynavers')('dynavers.json');
 const fs = require('fs');
 const deleteDir = require('rimraf');
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
-const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
 
 const VERSIONS = require('./helpers/versions');
 const OUTPUT_DIR = path.join(__dirname, '../dist');
@@ -50,16 +49,16 @@ describe('Core functionality: ', function () {
       it('does nothing with default settings', (done) => {
         testPlugin(
             webpack,
-            { entry: path.join(__dirname, 'fixtures/script1.js'),
-              output: {
-                path: OUTPUT_DIR,
-                filename: 'index_bundle.js'
-              },
-              plugins: [
-                new HtmlWebpackPlugin(),
-                new ScriptExtHtmlWebpackPlugin()
-              ]
+          { entry: path.join(__dirname, 'fixtures/script1.js'),
+            output: {
+              path: OUTPUT_DIR,
+              filename: 'index_bundle.js'
             },
+            plugins: [
+              new HtmlWebpackPlugin(),
+              new ScriptExtHtmlWebpackPlugin()
+            ]
+          },
             [/(<script type="text\/javascript" src="index_bundle.js"><\/script>)/],
             done);
       });
@@ -67,18 +66,18 @@ describe('Core functionality: ', function () {
       it('sets async default for single script', (done) => {
         testPlugin(
             webpack,
-            { entry: path.join(__dirname, 'fixtures/script1.js'),
-              output: {
-                path: OUTPUT_DIR,
-                filename: 'index_bundle.js'
-              },
-              plugins: [
-                new HtmlWebpackPlugin(),
-                new ScriptExtHtmlWebpackPlugin({
-                  defaultAttribute: 'async'
-                })
-              ]
+          { entry: path.join(__dirname, 'fixtures/script1.js'),
+            output: {
+              path: OUTPUT_DIR,
+              filename: 'index_bundle.js'
             },
+            plugins: [
+              new HtmlWebpackPlugin(),
+              new ScriptExtHtmlWebpackPlugin({
+                defaultAttribute: 'async'
+              })
+            ]
+          },
             [/(<script src="index_bundle.js" type="text\/javascript" async><\/script>)/],
             done);
       });
@@ -86,18 +85,18 @@ describe('Core functionality: ', function () {
       it('sets defer default for single script', (done) => {
         testPlugin(
             webpack,
-            { entry: path.join(__dirname, 'fixtures/script1.js'),
-              output: {
-                path: OUTPUT_DIR,
-                filename: 'index_bundle.js'
-              },
-              plugins: [
-                new HtmlWebpackPlugin(),
-                new ScriptExtHtmlWebpackPlugin({
-                  defaultAttribute: 'defer'
-                })
-              ]
+          { entry: path.join(__dirname, 'fixtures/script1.js'),
+            output: {
+              path: OUTPUT_DIR,
+              filename: 'index_bundle.js'
             },
+            plugins: [
+              new HtmlWebpackPlugin(),
+              new ScriptExtHtmlWebpackPlugin({
+                defaultAttribute: 'defer'
+              })
+            ]
+          },
             [/(<script src="index_bundle.js" type="text\/javascript" defer><\/script>)/],
             done);
       });
@@ -278,32 +277,39 @@ describe('Core functionality: ', function () {
           done);
       });
 
-      it('plays happily with other plugins on the same html plugin event', (done) => {
+      it('plays happily with other plugin on the same html plugin event', (done) => {
+        var otherPluginCalled = false;
+        const otherPlugin = {
+          apply: compiler => {
+            compiler.plugin('compilation', compilation => {
+              compilation.plugin('html-webpack-plugin-after-html-processing', (htmlPluginData, callback) => {
+                otherPluginCalled = true;
+                callback(null, htmlPluginData);
+              });
+            });
+          }
+        };
+        const additionalTest = () => {
+          expect(otherPluginCalled).toBe(true);
+          done();
+        };
         testPlugin(
           webpack,
-          { entry: path.join(__dirname, 'fixtures/script1_with_style.js'),
+          { entry: path.join(__dirname, 'fixtures/script1.js'),
             output: {
               path: OUTPUT_DIR,
               filename: 'index_bundle.js'
             },
-            module: {
-              loaders: [
-              {test: /\.css$/, loader: StyleExtHtmlWebpackPlugin.inline()}
-              ]
-            },
             plugins: [
               new HtmlWebpackPlugin(),
+              otherPlugin,
               new ScriptExtHtmlWebpackPlugin({
                 defaultAttribute: 'async'
-              }),
-              new StyleExtHtmlWebpackPlugin()
+              })
             ]
           },
-          [
-            /(<script src="index_bundle.js" type="text\/javascript" async><\/script>)/,
-            /<style>[\s\S]*background: snow;[\s\S]*<\/style>/
-          ],
-          done);
+          [/(<script src="index_bundle.js" type="text\/javascript" async><\/script>)/],
+          additionalTest);
       });
 
       it('module attribute selectively added', (done) => {
