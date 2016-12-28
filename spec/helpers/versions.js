@@ -1,7 +1,7 @@
 'use strict';
 
 const webpack1 = {
-  webpack: '1.13.3'
+  webpack: '1.14.0'
 };
 
 const webpack2 = {
