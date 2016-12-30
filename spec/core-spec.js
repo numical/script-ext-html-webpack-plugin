@@ -7,8 +7,6 @@ const version = require('./helpers/versions.js');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('../../html-webpack-plugin/index.js'); // html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
-const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const testPlugin = require('./helpers/core-test.js');
 
 const OUTPUT_DIR = path.join(__dirname, '../dist');
@@ -187,29 +185,34 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   });
 
   it('plays happily with other plugins on the same html plugin event', (done) => {
+    var otherPluginCalled = false;
+    const otherPlugin = {
+      apply: compiler => {
+        compiler.plugin('compilation', compilation => {
+          compilation.plugin('html-webpack-plugin-after-html-processing', (htmlPluginData, callback) => {
+            otherPluginCalled = true;
+            callback(null, htmlPluginData);
+          });
+        });
+      }
+    };
+    const additionalTest = () => {
+      expect(otherPluginCalled).toBe(true);
+      done();
+    };
     const config = baseConfig(
       {
         defaultAttribute: 'async'
       },
-      'index_bundle.js'
+        'index_bundle.js'
     );
-    config.entry = path.join(__dirname, 'fixtures/script1_with_style.js');
-    config.plugins.push(new ExtractTextPlugin('styles.css'));
-    config.plugins.push(new StyleExtHtmlWebpackPlugin());
-    config.module = {
-      loaders: [
-        {
-          test: /\.css$/,
-          loader: version.extractTextLoader(ExtractTextPlugin, ['css-loader'])
-        }
-      ]
-    };
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    config.plugins.push(otherPlugin);
     const expected = baseExpectations();
     expected.html = [
-      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
-      /<style>[\s\S]*background: snow;[\s\S]*<\/style>/
+      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/
     ];
-    testPlugin(config, expected, done);
+    testPlugin(config, expected, additionalTest);
   });
 
   it('module attribute selectively added', (done) => {
