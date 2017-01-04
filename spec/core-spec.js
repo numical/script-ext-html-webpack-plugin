@@ -5,7 +5,7 @@ const path = require('path');
 const deleteDir = require('rimraf');
 const version = require('./helpers/versions.js');
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('../../html-webpack-plugin/index.js'); // html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
 const testPlugin = require('./helpers/core-test.js');
 

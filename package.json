@@ -40,9 +40,9 @@
     "dynavers": "^0.2.0",
     "handlebars": "^4.0.6",
     "handlebars-loader": "^1.4.0",
-    "html-webpack-plugin": "^2.24.1",
+    "html-webpack-plugin": "^2.26.0",
     "jasmine": "^2.5.2",
-    "jasmine-spec-reporter": "^2.7.0",
+    "jasmine-spec-reporter": "^3.0.0",
     "jasmine2-custom-message": "^0.8.2",
     "rimraf": "^2.5.4",
     "semistandard": "^9.1.0"

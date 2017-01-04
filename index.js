@@ -88,7 +88,7 @@ const updateSrcElement = (options, tag) => {
   });
   if (!newAttribute) newAttribute = options.defaultAttribute;
   if (newAttribute !== SYNC) {
-    Object.defineProperty(tag.attributes, newAttribute, {enumerable: true});
+    tag.attributes[newAttribute] = true;
   }
   // possibly overwrite existing type attribute
   if (matches(scriptName, options[MODULE])) {
