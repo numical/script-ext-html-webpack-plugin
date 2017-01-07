@@ -74,7 +74,16 @@ const replaceWithInlineElement = (compilation, tag) => {
   return newTag;
 };
 
-const getScriptName = (tag) => tag.attributes.src;
+const getScriptName = (tag) => {
+  let scriptName = tag.attributes.src;
+
+  // remove publicPath prefix
+  if (scriptName.includes('/')) {
+    scriptName = scriptName.replace(/^.*\//, '');
+  }
+
+  return scriptName;
+};
 
 const updateSrcElement = (options, tag) => {
   const scriptName = getScriptName(tag);

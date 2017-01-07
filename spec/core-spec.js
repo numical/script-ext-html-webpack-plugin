@@ -357,4 +357,18 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     ];
     testPlugin(config, expected, done);
   });
+
+  it('inline scripts work with output.publicPath', done => {
+    const config = baseConfig(
+      {
+        inline: ['a']
+      }
+    );
+    config.output.publicPath = '/subdomain/';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script>[\s\S]*<\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 });
