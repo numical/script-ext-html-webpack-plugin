@@ -301,7 +301,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('named stylesheets work with output.publicPath', done => {
+  it('named scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
         sync: ['a.js'],
@@ -319,7 +319,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('muliple merged stylesheets work with output.publicPath', done => {
+  it('muliple merged scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
         async: ['main']
