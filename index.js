@@ -15,6 +15,8 @@ const DEFAULT_OPTIONS = {
   defer: [],
   defaultAttribute: SYNC,
   module: [],
+  prefetch: [],
+  preload: [],
   removeInlinedAssets: true
 };
 
@@ -27,6 +29,11 @@ const shouldUpdateElements = (options) => {
            options.async.length === 0 &&
            options.defer.length === 0 &&
            options.module.length === 0);
+};
+
+const shouldAddResourceHints = (options) => {
+  return !(options.prefetch.lengh === 0 &&
+           options.preload.length === 0);
 };
 
 const updateElements = (compilation, options, tags) => {
@@ -98,6 +105,10 @@ const updateSrcElement = (options, tag) => {
   return tag;
 };
 
+const addResourceHints = (compilation, options, tags) => {
+  // TODO
+};
+
 class ScriptExtHtmlWebpackPlugin {
   constructor (options) {
     this.options = Object.assign({}, DEFAULT_OPTIONS, options);
@@ -113,6 +124,10 @@ class ScriptExtHtmlWebpackPlugin {
             pluginArgs.head = updateElements(compilation, options, pluginArgs.head);
             debug(`${EVENT}: replacing <body> <script> elements`);
             pluginArgs.body = updateElements(compilation, options, pluginArgs.body);
+          }
+          if (shouldAddResourceHints(options)) {
+            debug(`${EVENT}: adding resource hints`);
+            pluginArgs.head = addResourceHints(compilation, options, pluginArgs.head);
           }
           debug(`${EVENT}: completed`);
           callback(null, pluginArgs);

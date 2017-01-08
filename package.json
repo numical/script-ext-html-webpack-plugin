@@ -26,7 +26,9 @@
     "inline",
     "script",
     "module",
-    "script-ext-html-webpack-plugin"
+    "resource hints",
+    "prefetch",
+    "preload"
   ],
   "author": "Mike Evans <mike.evans@numical.com> (https://github.com/numical)",
   "license": "MIT",
