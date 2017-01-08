@@ -301,7 +301,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('named stylesheets work with output.publicPath', done => {
+  it('named scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
         sync: ['a.js'],
@@ -319,7 +319,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('muliple merged stylesheets work with output.publicPath', done => {
+  it('multiple merged scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
         async: ['main']
@@ -354,6 +354,20 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     expected.html = [
       /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
       /(<script>[\s\S]*Hello World[\s\S]*<\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('inline scripts work with output.publicPath', done => {
+    const config = baseConfig(
+      {
+        inline: ['a']
+      }
+    );
+    config.output.publicPath = '/subdomain/';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script>[\s\S]*<\/script>)/
     ];
     testPlugin(config, expected, done);
   });
