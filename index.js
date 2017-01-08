@@ -17,6 +17,7 @@ const DEFAULT_OPTIONS = {
   module: [],
   removeInlinedAssets: true
 };
+const PUBLIC_PATH_PREFIX = /^.*\//;
 
 const shouldUpdateElements = (options) => {
   if (ATTRIBUTE_PRIORITIES.indexOf(options.defaultAttribute) < 0) {
@@ -76,12 +77,10 @@ const replaceWithInlineElement = (compilation, tag) => {
 
 const getScriptName = (tag) => {
   let scriptName = tag.attributes.src;
-
   // remove publicPath prefix
-  if (~scriptName.indexOf('/')) {
-    scriptName = scriptName.replace(/^.*\//, '');
+  if (scriptName.indexOf('/') > -1) {
+    scriptName = scriptName.replace(PUBLIC_PATH_PREFIX, '');
   }
-
   return scriptName;
 };
 
