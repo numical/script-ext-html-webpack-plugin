@@ -64,7 +64,7 @@ const matches = (scriptName, patterns) => {
     if (pattern instanceof RegExp) {
       return pattern.test(scriptName);
     } else {
-      return scriptName.indexOf(pattern) > -1;
+      return scriptName.includes(pattern);
     }
   });
 };
@@ -83,13 +83,15 @@ const replaceWithInlineElement = (compilation, tag) => {
 };
 
 const getScriptName = (tag) => {
-  let scriptName = tag.attributes.src;
+  let scriptName = getRawScriptName(tag);
   // remove publicPath prefix
-  if (scriptName.indexOf('/') > -1) {
+  if (scriptName.includes('/')) {
     scriptName = scriptName.replace(PUBLIC_PATH_PREFIX, '');
   }
   return scriptName;
 };
+
+const getRawScriptName = (tag) => tag.attributes.src;
 
 const updateSrcElement = (options, tag) => {
   const scriptName = getScriptName(tag);
@@ -113,8 +115,38 @@ const updateSrcElement = (options, tag) => {
   return tag;
 };
 
-const addResourceHints = (compilation, options, tags) => {
-  // TODO
+const addResourceHints = (options, tags) => {
+  return tags.reduce(
+    (hints, tag) => {
+      const scriptName = getScriptName(tag);
+      if (matches(scriptName, options.prefetch)) {
+        hints.push(createResourceHint('prefetch', tag));
+      } else if (matches(scriptName, options.preload)) {
+        hints.push(createResourceHint('preload', tag));
+      }
+      return hints;
+    },
+    []
+  );
+};
+
+const createResourceHint = (rel, tag) => {
+  return {
+    tagName: 'link',
+    closeTag: true,
+    attributes: {
+      rel: rel,
+      href: getRawScriptName(tag),
+      as: 'script'
+    }
+  };
+};
+
+const concat = (...arrays) => {
+  return arrays.reduce(
+    (combined, array) => array ? combined.concat(array) : combined,
+    []
+  );
 };
 
 class ScriptExtHtmlWebpackPlugin {
@@ -135,7 +167,11 @@ class ScriptExtHtmlWebpackPlugin {
           }
           if (shouldAddResourceHints(options)) {
             debug(`${EVENT}: adding resource hints`);
-            pluginArgs.head = addResourceHints(compilation, options, pluginArgs.head);
+            pluginArgs.head = concat(
+              pluginArgs.head,
+              addResourceHints(options, pluginArgs.head),
+              addResourceHints(options, pluginArgs.body)
+            );
           }
           debug(`${EVENT}: completed`);
           callback(null, pluginArgs);

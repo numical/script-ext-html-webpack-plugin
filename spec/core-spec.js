@@ -371,4 +371,59 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     ];
     testPlugin(config, expected, done);
   });
+
+  it('adds prefetch resource hint for specific script', (done) => {
+    const config = baseConfig(
+      {
+        prefetch: ['index_bundle.js']
+      },
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js"><\/script>)/,
+      /(<link rel="prefetch" href="index_bundle.js" as="script")>/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('adds preload resource hint for specific script', (done) => {
+    const config = baseConfig(
+      {
+        preload: ['index_bundle.js']
+      },
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js"><\/script>)/,
+      /(<link rel="preload" href="index_bundle.js" as="script")>/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  fit('adds preload and prefetch for  multiple scripts', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async',
+        prefetch: [/$a/],
+        preload: [/$b/]
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="c.js" async><\/script>)/,
+      /(<link rel="prefetch" href="a.js" as="script")>/,
+      /(<link rel="preload" href="b.js" as="script")>/
+    ];
+    expected.not.html = [
+      /(<link rel="prefetch" href="c.js" as="script")>/,
+      /(<link rel="preload" href="a.js" as="script")>/
+    ];
+    testPlugin(config, expected, done);
+  });
 });

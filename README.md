@@ -201,9 +201,13 @@ plugins: [
 Change History
 --------------
 
+v1.5.x
+* added resource hints
+
 v1.4.x
 * updated internal mechanism to use new(ish) [HtmlWebpackPlugin event](https://github.com/ampedandwired/html-webpack-plugin#events)
 * improved test mechanism and enhanced test coverage
+* added support for `publicPath` for inline scripts (thanks @JustAboutJeff)
 
 v1.3.x
 * added `type="text/javascript"` by default, in response to [Safari 9.1.1 bug](https://github.com/ampedandwired/html-webpack-plugin/issues/309)
