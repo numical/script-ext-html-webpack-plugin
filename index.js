@@ -33,7 +33,7 @@ const shouldUpdateElements = (options) => {
 };
 
 const shouldAddResourceHints = (options) => {
-  return !(options.prefetch.lengh === 0 &&
+  return !(options.prefetch.length === 0 &&
            options.preload.length === 0);
 };
 
@@ -93,6 +93,8 @@ const getScriptName = (tag) => {
 
 const getRawScriptName = (tag) => tag.attributes.src;
 
+const hasScriptName = (tag) => tag.attributes && tag.attributes.src;
+
 const updateSrcElement = (options, tag) => {
   const scriptName = getScriptName(tag);
   // select new attribute, if any, by priority
@@ -116,13 +118,14 @@ const updateSrcElement = (options, tag) => {
 };
 
 const addResourceHints = (options, tags) => {
-  return tags.reduce(
-    (hints, tag) => {
+  return tags
+    .filter(hasScriptName)
+    .reduce((hints, tag) => {
       const scriptName = getScriptName(tag);
-      if (matches(scriptName, options.prefetch)) {
-        hints.push(createResourceHint('prefetch', tag));
-      } else if (matches(scriptName, options.preload)) {
+      if (matches(scriptName, options.preload)) {
         hints.push(createResourceHint('preload', tag));
+      } else if (matches(scriptName, options.prefetch)) {
+        hints.push(createResourceHint('prefetch', tag));
       }
       return hints;
     },
@@ -142,7 +145,7 @@ const createResourceHint = (rel, tag) => {
   };
 };
 
-const concat = (...arrays) => {
+const concat = (arrays) => {
   return arrays.reduce(
     (combined, array) => array ? combined.concat(array) : combined,
     []
@@ -167,11 +170,11 @@ class ScriptExtHtmlWebpackPlugin {
           }
           if (shouldAddResourceHints(options)) {
             debug(`${EVENT}: adding resource hints`);
-            pluginArgs.head = concat(
+            pluginArgs.head = concat([
               pluginArgs.head,
               addResourceHints(options, pluginArgs.head),
               addResourceHints(options, pluginArgs.body)
-            );
+            ]);
           }
           debug(`${EVENT}: completed`);
           callback(null, pluginArgs);

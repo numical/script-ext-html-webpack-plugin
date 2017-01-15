@@ -1,6 +1,6 @@
 {
   "name": "script-ext-html-webpack-plugin",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Enhances html-webpack-plugin functionality with async and defer attributes for script elements",
   "main": "index.js",
   "files": [
@@ -36,15 +36,17 @@
     "url": "https://github.com/numical/script-ext-html-webpack-plugin/issues"
   },
   "homepage": "https://github.com/numical/script-ext-html-webpack-plugin",
+  "dependencies": {
+    "debug": "^2.3.3"
+  },
   "devDependencies": {
     "css-loader": "^0.26.1",
-    "debug": "^2.3.3",
     "dynavers": "^0.2.0",
     "handlebars": "^4.0.6",
     "handlebars-loader": "^1.4.0",
     "html-webpack-plugin": "^2.26.0",
-    "jasmine": "^2.5.2",
-    "jasmine-spec-reporter": "^3.0.0",
+    "jasmine": "^2.5.3",
+    "jasmine-spec-reporter": "^3.2.0",
     "jasmine2-custom-message": "^0.8.2",
     "rimraf": "^2.5.4",
     "semistandard": "^9.1.0"

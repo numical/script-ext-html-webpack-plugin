@@ -10,7 +10,9 @@ functionality with different deployment options for your scripts including:
 - [`async`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
 - [`defer`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
 - [`type="module"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
-- inlining
+- inlining;
+- [`preload`](https://www.w3.org/TR/preload/) resource hint;
+- [`prefetch`](https://www.w3.org/TR/resource-hints/#dfn-prefetch) resource hint
 
 This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
 
@@ -74,7 +76,9 @@ You must pass a hash of configuration options to the plugin to cause the additio
 - `defer`: array of `String`'s and/or `RegExp`'s defining script names that should have a `defer` attribute (default: `[]`);
 - `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute (default: `'sync'`);
 - `module`: array of `String`'s and/or `RegExp`'s defining script names that should have a
-`type="module"` attribute (default: `[]`).
+`type="module"` attribute (default: `[]`);
+- `preload`: array of `String`'s and/or `RegExp`'s defining scripts that should have accompanying preload resource hints (default: `[]`);
+- `prefetch`: array of `String`'s and/or `RegExp`'s defining scripts that should have accompanying prefetch resource hints (default: `[]`);
 
 In the arrays a `String` value matches if it is a substring of the script name.
 
@@ -91,6 +95,7 @@ In more complicated use cases it may prove difficult to ensure that the pattern 
 5. if a script name does not match any of the previous conditions, it will have the `defaultAttribute' attribute.
 
 The `module` attribute is independent of conditions 2-5, but will be ignored if the script isinlined.
+
 
 Some Examples:
 
@@ -127,16 +132,19 @@ plugins: [
 ]  
 ```
 
-Script 'startup.js' is inlined whilst all other scripts are async:
+Script 'startup.js' is inlined whilst all other scripts are async and preloaded:
 ```javascript
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
     inline: ['startup'],
+    preload: [/\.js$/],
     defaultAttribute: 'async'
   })
 ]  
 ```
+
+
 
 And so on, to craziness:
 ```javascript
@@ -146,7 +154,8 @@ plugins: [
     inline: ['startup'],  
     sync: [/imp(1|2){1,3}}/, 'initial'],
     defer: ['slow', /big.*andslow/],
-    module: [/^((?!sync).)*/, 'mod']
+    module: [/^((?!sync).)*/, 'mod'],
+    prefetch: ['indirectly-referenced.js'],
     defaultAttribute: 'async'
   })
 ]  
@@ -198,6 +207,23 @@ plugins: [
 * An alternative approach, based on jade templates is illustrated in the [HtmlWebpackPlugin inline example](https://github.com/ampedandwired/html-webpack-plugin/tree/master/examples/inline).
 
 
+Resource Hints
+--------------
+In most cases, modern browsers will intelligently preload referenced script assets.
+However if you wish, this plugin can add resource hint elements to the `<head>` element of the form:
+```html
+<link rel="[preload|prefetch]" href="[scriptname]" as="script">
+```
+Use the `preload` and `prefetch` configuration options.
+
+Where `preload` and `prefetch` patterns overlap, `preload` takes precedence.
+
+Notes:
+- for more on resource hints, see the [`w3c`](https://www.w3.org/TR/resource-hints) definition;  
+- for a more complete solution that allows the preloading\fetching of assets other than scripts, see the [resource-hints-webpack-plugin](https://github.com/jantimon/resource-hints-webpack-plugin).
+
+
+
 Change History
 --------------
 
@@ -208,6 +234,7 @@ v1.4.x
 * updated internal mechanism to use new(ish) [HtmlWebpackPlugin event](https://github.com/ampedandwired/html-webpack-plugin#events)
 * improved test mechanism and enhanced test coverage
 * added support for `publicPath` for inline scripts (thanks @JustAboutJeff)
+* works with 'webpack -p' (thanks @brandongoode)
 
 v1.3.x
 * added `type="text/javascript"` by default, in response to [Safari 9.1.1 bug](https://github.com/ampedandwired/html-webpack-plugin/issues/309)

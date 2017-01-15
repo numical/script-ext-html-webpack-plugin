@@ -404,12 +404,12 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  fit('adds preload and prefetch for  multiple scripts', (done) => {
+  it('adds preload and prefetch for multiple scripts', (done) => {
     const config = baseConfig(
       {
         defaultAttribute: 'async',
-        prefetch: [/$a/],
-        preload: [/$b/]
+        prefetch: [/^a/],
+        preload: [/^b/]
       }
     );
     const expected = baseExpectations();
@@ -423,6 +423,46 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     expected.not.html = [
       /(<link rel="prefetch" href="c.js" as="script")>/,
       /(<link rel="preload" href="a.js" as="script")>/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('preload has priority over prefetch', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async',
+        defer: ['c.js'],
+        prefetch: [/\.js$/],
+        preload: [/^b/]
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="c.js" defer><\/script>)/,
+      /(<link rel="prefetch" href="a.js" as="script")>/,
+      /(<link rel="preload" href="b.js" as="script")>/,
+      /(<link rel="prefetch" href="c.js" as="script")>/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('preload and prefetch include output.publicPath', (done) => {
+    const config = baseConfig(
+      {
+        prefetch: [/^a/],
+        preload: [/^b/]
+      }
+    );
+    config.output.publicPath = '/subdomain/';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="\/subdomain\/a.js"><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/b.js"><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/c.js"><\/script>)/,
+      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script")>/,
+      /(<link rel="preload" href="\/subdomain\/b.js" as="script")>/
     ];
     testPlugin(config, expected, done);
   });
