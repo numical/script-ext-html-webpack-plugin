@@ -229,6 +229,7 @@ Change History
 
 v1.5.x
 * added resource hints
+* works with webpack 2.2.0
 
 v1.4.x
 * updated internal mechanism to use new(ish) [HtmlWebpackPlugin event](https://github.com/ampedandwired/html-webpack-plugin#events)

@@ -11,7 +11,7 @@ const VERSIONS = {
   webpack2: {
     isWebpack1: false,
     isWebpack2: true,
-    webpack: '2.2.0-rc.3'
+    webpack: '2.2.0'
   }
 };
 
