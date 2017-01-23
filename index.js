@@ -117,6 +117,18 @@ const updateSrcElement = (options, tag) => {
   return tag;
 };
 
+const addCustomResourceHints = (options, scripts) => {
+    let hints = [];
+    scripts.forEach(script => {
+      if (options.dynamicChunks.preload) {
+        hints.push(createResourceHint('preload', null, script));
+      } else if (options.dynamicChunks.prefetch) {
+        hints.push(createResourceHint('prefetch', null, script));
+      }
+    });
+    return hints;
+};
+
 const addResourceHints = (options, tags) => {
   return tags
     .filter(hasScriptName)
@@ -133,13 +145,13 @@ const addResourceHints = (options, tags) => {
   );
 };
 
-const createResourceHint = (rel, tag) => {
+const createResourceHint = (rel, tag, customPath) => {
   return {
     tagName: 'link',
     closeTag: true,
     attributes: {
       rel: rel,
-      href: getRawScriptName(tag),
+      href: customPath || getRawScriptName(tag),
       as: 'script'
     }
   };
@@ -175,6 +187,30 @@ class ScriptExtHtmlWebpackPlugin {
               addResourceHints(options, pluginArgs.head),
               addResourceHints(options, pluginArgs.body)
             ]);
+          }
+          if (shouldUpdateElements(options)) {
+            if (options.dynamicChunks) {
+              const chunkRegEx = /^chunk[.]/;
+              // Get the paths to dynamic chunks
+              const extractedChunks = compilation
+                .chunks
+                .reduce((chunks, chunk) => chunks.concat(chunk.files), [])
+                .filter(chunk => chunkRegEx.test(chunk));
+              // Default to 'head' as the position
+              if (options.dynamicChunks.position === 'body') {
+                  debug(`${EVENT}: injecting <body> resource hints`);
+                  pluginArgs.body = concat([
+                      pluginArgs.body,
+                      addCustomResourceHints(options, extractedChunks)
+                  ]);
+              } else {
+                  debug(`${EVENT}: injecting <head> resource hints`);
+                  pluginArgs.head = concat([
+                      pluginArgs.head,
+                      addCustomResourceHints(options, extractedChunks)
+                  ]);
+              }
+            }
           }
           debug(`${EVENT}: completed`);
           callback(null, pluginArgs);
