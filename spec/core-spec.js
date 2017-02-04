@@ -119,8 +119,8 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('sync and defer string exceptions and async default', (done) => {
     const config = baseConfig(
       {
-        sync: ['a'],
-        defer: ['b'],
+        sync: 'a',
+        defer: 'b',
         defaultAttribute: 'async'
       }
     );
@@ -136,7 +136,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('defer regex exceptions and sync default', (done) => {
     const config = baseConfig(
       {
-        defer: [/(a|b).*/],
+        defer: /(a|b).*/,
         defaultAttribute: 'sync'
       }
     );
@@ -154,7 +154,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       {
         sync: [/(a|c).*/],
         async: ['c'],
-        defer: [/a.*/],
+        defer: /a.*/,
         defaultAttribute: 'defer'
       }
     );
@@ -171,7 +171,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     const config = baseConfig(
       {
         async: [/(a|c).*/, 'b'],
-        defer: [/a.*/],
+        defer: /a.*/,
         defaultAttribute: 'sync'
       }
     );
@@ -218,7 +218,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('module attribute selectively added', (done) => {
     const config = baseConfig(
       {
-        module: ['b'],
+        module: 'b',
         defaultAttribute: 'async'
       }
     );
@@ -234,8 +234,8 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('module attribute independent of other attributes', (done) => {
     const config = baseConfig(
       {
-        async: ['b'],
-        defer: [/(a|b)/],
+        async: 'b',
+        defer: /(a|b)/,
         module: ['b', 'c']
       }
     );
@@ -251,7 +251,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('inlining works for single script', (done) => {
     const config = baseConfig(
       {
-        inline: ['b'],
+        inline: 'b',
         defaultAttribute: 'async'
       }
     );
@@ -267,7 +267,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('works with minimized inlined scripts', done => {
     const config = baseConfig(
       {
-        inline: [/sim/]
+        inline: /sim/
       }
     );
     config.entry = {
@@ -304,9 +304,9 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('named scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
-        sync: ['a.js'],
+        sync: 'a.js',
         async: ['b.js'],
-        defer: ['c.js']
+        defer: 'c.js'
       }
     );
     config.output.publicPath = '/subdomain/';
@@ -322,7 +322,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('multiple merged scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
-        async: ['main']
+        async: 'main'
       }
     );
     config.entry = [
@@ -361,7 +361,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('inline scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
-        inline: ['a']
+        inline: 'a'
       }
     );
     config.output.publicPath = '/subdomain/';
@@ -391,7 +391,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   it('adds preload resource hint for specific script', (done) => {
     const config = baseConfig(
       {
-        preload: ['index_bundle.js']
+        preload: 'index_bundle.js'
       },
       'index_bundle.js'
     );
@@ -409,7 +409,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       {
         defaultAttribute: 'async',
         prefetch: [/^a/],
-        preload: [/^b/]
+        preload: /^b/
       }
     );
     const expected = baseExpectations();
@@ -432,7 +432,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       {
         defaultAttribute: 'async',
         defer: ['c.js'],
-        prefetch: [/\.js$/],
+        prefetch: /\.js$/,
         preload: [/^b/]
       }
     );
@@ -452,7 +452,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     const config = baseConfig(
       {
         prefetch: [/^a/],
-        preload: [/^b/]
+        preload: /^b/
       }
     );
     config.output.publicPath = '/subdomain/';

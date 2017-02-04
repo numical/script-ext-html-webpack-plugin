@@ -59,7 +59,7 @@ All scripts set to `async` except 'first.js' which is sync:
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    sync: ['first.js'],
+    sync: 'first.js',
     defaultAttribute: 'async'
   })
 ]  
@@ -70,27 +70,31 @@ Configuration offers much more complex options:
 Configuration
 -------------
 You must pass a hash of configuration options to the plugin to cause the addition of attributes:
-- `inline`: array of `String`'s and/or `RegExp`'s defining scripts that should be inlined in the html (default: `[]`);
-- `sync`: array of `String`'s and/or `RegExp`'s defining script names that should have no attribute (default: `[]`);
-- `async`: array of `String`'s and/or `RegExp`'s defining script names that should have an `async` attribute (default: `[]`);
-- `defer`: array of `String`'s and/or `RegExp`'s defining script names that should have a `defer` attribute (default: `[]`);
+- `inline`: a __script matching pattern__ defining scripts that should be inlined in the html (default: `[]`);
+- `sync`: a  __script matching pattern__ defining script names that should have no attribute (default: `[]`);
+- `async`: a __script matching pattern__ defining script names that should have an `async` attribute (default: `[]`);
+- `defer`: a __script matching pattern__ defining script names that should have a `defer` attribute (default: `[]`);
 - `defaultAttribute`: `'sync' | 'async' | 'defer'` The default attribute to set - `'sync'` actually results in no attribute (default: `'sync'`);
-- `module`: array of `String`'s and/or `RegExp`'s defining script names that should have a
+- `module`: a __script matching pattern__ defining script names that should have a
 `type="module"` attribute (default: `[]`);
-- `preload`: array of `String`'s and/or `RegExp`'s defining scripts that should have accompanying preload resource hints (default: `[]`);
-- `prefetch`: array of `String`'s and/or `RegExp`'s defining scripts that should have accompanying prefetch resource hints (default: `[]`);
+- `preload`: a __script matching pattern__ defining scripts that should have accompanying preload resource hints (default: `[]`);
+- `prefetch`: a __script matching pattern__ defining scripts that should have accompanying prefetch resource hints (default: `[]`);
 
-In the arrays a `String` value matches if it is a substring of the script name.
+A __script matching pattern__ matches against a script's name.  It can be one of:
+- a `String`-  matches if it is a substring of the script name;
+- a `RegExp`;
+- an array of `String`'s and/or `RegExp`'s - matches if any one element matches;
+- a hash with property `test` with a value of one of the above.
 
 In more complicated use cases it may prove difficult to ensure that the pattern matching for different attributes are mutually exclusive.  To prevent confusion, the plugin operates a simple precedence model:
 
-1. if a script name matches a `RegEx` or `String` from the `inline` option, it will be inlined;
+1. if a script name matches the`inline` script matching pattern, it will be inlined;
 
-2. if a script name matches a `Regex` or `String` from the `sync` option, it will have no attribute, *unless* it matched condition 1;
+2. if a script name matches the `sync` script matching pattern, it will have no attribute, *unless* it matched condition 1;
 
-3. if a script name matches a `Regex` or `String` from the `async` option, it will have the `async` attribute, *unless* it matched conditions 1 or 2;
+3. if a script name the `async` script matching pattern, it will have the `async` attribute, *unless* it matched conditions 1 or 2;
 
-4. if a script name matches a `Regex` or `String` from the `defer` option, it will have the `defer` attribute, *unless* it matched conditions 1, 2 or 3;
+4. if a script name matches the `defer` script matching pattern, it will have the `defer` attribute, *unless* it matched conditions 1, 2 or 3;
 
 5. if a script name does not match any of the previous conditions, it will have the `defaultAttribute' attribute.
 
@@ -104,7 +108,7 @@ All scripts with 'important' in their name are sync and all others set to `defer
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    sync: ['important'],
+    sync: 'important'
     defaultAttribute: 'defer'
   })
 ]  
@@ -115,7 +119,7 @@ Alternatively, using a regular expression:
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    sync: [/important/],
+    sync: /important/,
     defaultAttribute: 'defer'
   })
 ]  
@@ -126,8 +130,8 @@ All scripts with 'mod' in their name are async and type 'module', all others are
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    async: ['mod'],
-    module: ['mod']
+    async: 'mod',
+    module: 'mod'
   })
 ]  
 ```
@@ -137,13 +141,12 @@ Script 'startup.js' is inlined whilst all other scripts are async and preloaded:
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    inline: ['startup'],
-    preload: [/\.js$/],
+    inline: 'startup',
+    preload: /\.js$/,
     defaultAttribute: 'async'
   })
 ]  
 ```
-
 
 
 And so on, to craziness:
@@ -151,11 +154,11 @@ And so on, to craziness:
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    inline: ['startup'],  
+    inline: 'startup',  
     sync: [/imp(1|2){1,3}}/, 'initial'],
     defer: ['slow', /big.*andslow/],
     module: [/^((?!sync).)*/, 'mod'],
-    prefetch: ['indirectly-referenced.js'],
+    prefetch: 'indirectly-referenced.js',
     defaultAttribute: 'async'
   })
 ]  
@@ -226,6 +229,11 @@ Notes:
 
 Change History
 --------------
+
+v1.6.x
+* works with webpack 2.2.1
+* enhanced API (no need to use array), fully backwardly compatible
+* refactor in preparation for v2
 
 v1.5.x
 * added resource hints
