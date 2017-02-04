@@ -4,7 +4,8 @@
   "description": "Enhances html-webpack-plugin functionality with async and defer attributes for script elements",
   "main": "index.js",
   "files": [
-    "index.js"
+    "index.js",
+    "lib/"
   ],
   "scripts": {
     "pretest": "semistandard & install-module-versions dynavers.json",
