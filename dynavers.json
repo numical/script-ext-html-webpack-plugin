@@ -1,6 +1,6 @@
 {
   "path": "dynavers_modules",
   "versions": {
-    "webpack" : ["1.14.0", "2.2.0"]
+    "webpack" : ["1.14.0", "2.2.1"]
   }
 }

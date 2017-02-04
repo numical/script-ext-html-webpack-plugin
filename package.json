@@ -44,7 +44,7 @@
     "dynavers": "^0.2.0",
     "handlebars": "^4.0.6",
     "handlebars-loader": "^1.4.0",
-    "html-webpack-plugin": "^2.26.0",
+    "html-webpack-plugin": "^2.28.0",
     "jasmine": "^2.5.3",
     "jasmine-spec-reporter": "^3.2.0",
     "jasmine2-custom-message": "^0.8.2",
