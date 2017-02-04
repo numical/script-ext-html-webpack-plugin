@@ -49,6 +49,20 @@ describe('Correctly understands all configuration permutations', () => {
     expect(denormaliseOptions(options)).toEqual(expected);
   });
 
+  it('handles hash configuration with single String for attribute', () => {
+    const options = {
+      module: {
+        test: '*.js'
+      }
+    };
+    const expected = Object.assign({}, DEFAULT_OPTIONS, {
+      module: {
+        test: ['*.js']
+      }
+    });
+    expect(denormaliseOptions(options)).toEqual(expected);
+  });
+
   it('handles full hash configuration for attribute', () => {
     const options = {
       module: {
@@ -63,7 +77,7 @@ describe('Correctly understands all configuration permutations', () => {
     expect(denormaliseOptions(options)).toEqual(expected);
   });
 
-  it('handles single Regex patterni for resource hint', () => {
+  it('handles single Regex pattern for resource hint', () => {
     const options = {preload: /\*.js$/};
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       preload: {
@@ -100,31 +114,32 @@ describe('Correctly understands all configuration permutations', () => {
     expect(denormaliseOptions(options)).toEqual(expected);
   });
 
-  it('handles partial (incorect) hash configuration for resource hint', () => {
+  it('handles full hash configuration with single string for resource hint', () => {
     const options = {
-      prefetch: {
+      preload: {
+        test: '.js',
         chunks: 'all'
       }
     };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
-      prefetch: {
-        test: [],
+      preload: {
+        test: ['.js'],
         chunks: 'all'
       }
     });
     expect(denormaliseOptions(options)).toEqual(expected);
   });
 
-  it('handles full hash configuration for resource hint', () => {
+  it('handles full hash configuration with array for resource hint', () => {
     const options = {
       preload: {
-        test: ['*.js', /\*.js$/],
+        test: ['.js', /\*.js$/],
         chunks: 'all'
       }
     };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       preload: {
-        test: ['*.js', /\*.js$/],
+        test: ['.js', /\*.js$/],
         chunks: 'all'
       }
     });
