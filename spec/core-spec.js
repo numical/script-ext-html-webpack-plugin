@@ -466,32 +466,4 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     ];
     testPlugin(config, expected, done);
   });
-
-  xit('handles dynamic chunks', (done) => {
-    const config = baseConfig(
-      {
-        defaultAttribute: 'async',
-        preload: {
-          test: /\.js$/,
-          chunks: 'all'
-        }
-      },
-      'index_bundle.js'
-    );
-    config.entry = path.join(__dirname, 'fixtures/dynamic_script.js');
-    config.output.chunkFilename = 'dynamic-chunk[id].js';
-    const expected = baseExpectations();
-    expected.html = [
-      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
-      /(<link rel="preload" href="dynamic-chunk0.js" as="script")>/,
-      /(<link rel="preload" href="dynamic-chunk1.js" as="script")>/
-    ];
-    expected.files = [
-      'index.html',
-      'index_bundle.js',
-      'dynamic-chunk0.js',
-      'dynamic-chunk1.js'
-    ];
-    testPlugin(config, expected, done);
-  });
 });

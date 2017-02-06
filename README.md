@@ -16,11 +16,14 @@ functionality with different deployment options for your scripts including:
 
 This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
 
-The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) incorporates all webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to add attributes to these elements or even to inline the code in the element.
+The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) incorporates all webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to:
+- add attributes to these elements;
+- inline the code in the elements;
+- add asynchronous scripts to prefetch and preload resource hints.
 
 Installation
 ------------
-You must be running webpack on node 4+.
+You must be running webpack (1.x or 2.x) )on node 4+.
 
 Install the plugin with npm:
 ```shell
@@ -100,6 +103,11 @@ In more complicated use cases it may prove difficult to ensure that the pattern 
 
 The `module` attribute is independent of conditions 2-5, but will be ignored if the script isinlined.
 
+The `preload` and `prefetch` configuration also have allow an additional property in the hash form that can be passed to include dynamically loaded (asynchronous) scripts.  This property is `chunks` and can have one of the following `String` values:
+- `initial`: default behaviour, no asynchronour scripts;
+- `async`: only asynchronouse scripts;
+- `all`: all scripts
+Note that you must still supply a `test` __script matching pattern__ which is also applied when selecting scripts.
 
 Some Examples:
 
@@ -147,6 +155,21 @@ plugins: [
   })
 ]  
 ```
+
+All asynchronous scripts are added as `preload` resource hints.  All other scripts are `async`:
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    async: /\.js$/
+    preload: {
+      test: /\.js$/,
+      chunks: 'async'
+    }
+  })
+]  
+```
+
 
 
 And so on, to craziness:
@@ -229,6 +252,9 @@ Notes:
 
 Change History
 --------------
+
+v1.7.x
+* adds asynchronous script resource hints
 
 v1.6.x
 * works with webpack 2.2.1
