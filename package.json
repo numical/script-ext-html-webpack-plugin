@@ -30,7 +30,9 @@
     "module",
     "resource hints",
     "prefetch",
-    "preload"
+    "preload",
+    "dynamic script",
+    "async script"
   ],
   "author": "Mike Evans <mike.evans@numical.com> (https://github.com/numical)",
   "license": "MIT",
