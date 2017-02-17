@@ -63,6 +63,22 @@ describe('Correctly understands all configuration permutations', () => {
     expect(denormaliseOptions(options)).toEqual(expected);
   });
 
+  it('handles hash configuration with position attribute', () => {
+    const options = {
+      module: {
+        test: '*.js',
+        position: 'body-top'
+      }
+    };
+    const expected = Object.assign({}, DEFAULT_OPTIONS, {
+      module: {
+        test: ['*.js'],
+        position: 'body-top'
+      }
+    });
+    expect(denormaliseOptions(options)).toEqual(expected);
+  });
+
   it('handles full hash configuration for attribute', () => {
     const options = {
       module: {
