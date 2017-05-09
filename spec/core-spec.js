@@ -383,7 +383,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/javascript" src="index_bundle.js"><\/script>)/,
-      /(<link rel="prefetch" href="index_bundle.js" as="script")>/
+      /(<link rel="prefetch" href="index_bundle.js" as="script"\/)>/
     ];
     testPlugin(config, expected, done);
   });
@@ -399,7 +399,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/javascript" src="index_bundle.js"><\/script>)/,
-      /(<link rel="preload" href="index_bundle.js" as="script")>/
+      /(<link rel="preload" href="index_bundle.js" as="script"\/)>/
     ];
     testPlugin(config, expected, done);
   });
@@ -417,12 +417,12 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       /(<script type="text\/javascript" src="a.js" async><\/script>)/,
       /(<script type="text\/javascript" src="b.js" async><\/script>)/,
       /(<script type="text\/javascript" src="c.js" async><\/script>)/,
-      /(<link rel="prefetch" href="a.js" as="script")>/,
-      /(<link rel="preload" href="b.js" as="script")>/
+      /(<link rel="prefetch" href="a.js" as="script"\/)>/,
+      /(<link rel="preload" href="b.js" as="script"\/)>/
     ];
     expected.not.html = [
-      /(<link rel="prefetch" href="c.js" as="script")>/,
-      /(<link rel="preload" href="a.js" as="script")>/
+      /(<link rel="prefetch" href="c.js" as="script"\/)>/,
+      /(<link rel="preload" href="a.js" as="script"\/)>/
     ];
     testPlugin(config, expected, done);
   });
@@ -441,9 +441,9 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       /(<script type="text\/javascript" src="a.js" async><\/script>)/,
       /(<script type="text\/javascript" src="b.js" async><\/script>)/,
       /(<script type="text\/javascript" src="c.js" defer><\/script>)/,
-      /(<link rel="prefetch" href="a.js" as="script")>/,
-      /(<link rel="preload" href="b.js" as="script")>/,
-      /(<link rel="prefetch" href="c.js" as="script")>/
+      /(<link rel="prefetch" href="a.js" as="script"\/)>/,
+      /(<link rel="preload" href="b.js" as="script"\/)>/,
+      /(<link rel="prefetch" href="c.js" as="script"\/)>/
     ];
     testPlugin(config, expected, done);
   });
@@ -461,8 +461,8 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       /(<script type="text\/javascript" src="\/subdomain\/a.js"><\/script>)/,
       /(<script type="text\/javascript" src="\/subdomain\/b.js"><\/script>)/,
       /(<script type="text\/javascript" src="\/subdomain\/c.js"><\/script>)/,
-      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script")>/,
-      /(<link rel="preload" href="\/subdomain\/b.js" as="script")>/
+      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script"\/)>/,
+      /(<link rel="preload" href="\/subdomain\/b.js" as="script"\/)>/
     ];
     testPlugin(config, expected, done);
   });

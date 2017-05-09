@@ -11,7 +11,7 @@ const VERSIONS = {
   webpack2: {
     isWebpack1: false,
     isWebpack2: true,
-    webpack: '2.2.1'
+    webpack: '2.5.1'
   }
 };
 
@@ -23,4 +23,3 @@ if (selected) {
 }
 
 module.exports = selected;
-
