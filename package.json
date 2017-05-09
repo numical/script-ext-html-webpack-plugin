@@ -41,10 +41,10 @@
   },
   "homepage": "https://github.com/numical/script-ext-html-webpack-plugin",
   "dependencies": {
-    "debug": "^2.3.3"
+    "debug": "^2.6.3"
   },
   "devDependencies": {
-    "css-loader": "^0.26.1",
+    "css-loader": "^0.27.3",
     "dynavers": "^0.2.0",
     "handlebars": "^4.0.6",
     "handlebars-loader": "^1.4.0",
@@ -52,8 +52,8 @@
     "jasmine": "^2.5.3",
     "jasmine-spec-reporter": "^3.2.0",
     "jasmine2-custom-message": "^0.8.2",
-    "rimraf": "^2.5.4",
-    "semistandard": "^9.1.0"
+    "rimraf": "^2.6.1",
+    "semistandard": "^10.0.0"
   },
   "peerDependencies": {
     "webpack": "1 || ^2.2.0"
