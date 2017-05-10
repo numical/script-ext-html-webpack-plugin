@@ -13,7 +13,7 @@
     "test:webpack1": "VERSION=webpack1 jasmine",
     "test:webpack2": "VERSION=webpack2 jasmine",
     "debug": "DEBUG=ScriptExt VERSION=webpack2 jasmine",
-    "node-debug": "DEBUG=ScriptExt VERSION=webpack1 node-debug jasmine"
+    "node-debug": "DEBUG=ScriptExt VERSION=webpack2 node-debug jasmine"
   },
   "repository": {
     "type": "git",

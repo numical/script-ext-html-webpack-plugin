@@ -11,7 +11,8 @@ const testPlugin = require('./helpers/core-test.js');
 
 const OUTPUT_DIR = path.join(__dirname, '../dist');
 
-const baseConfig = (scriptExtOptions, outputFilename) => {
+const baseConfig = (scriptExtOptions, htmlWebpackOptions, outputFilename) => {
+  htmlWebpackOptions = htmlWebpackOptions || {};
   outputFilename = outputFilename || '[name].js';
   return {
     entry: {
@@ -24,7 +25,7 @@ const baseConfig = (scriptExtOptions, outputFilename) => {
       filename: outputFilename
     },
     plugins: [
-      new HtmlWebpackPlugin(),
+      new HtmlWebpackPlugin(htmlWebpackOptions),
       new ScriptExtHtmlWebpackPlugin(scriptExtOptions)
     ]
   };
@@ -47,7 +48,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   });
 
   it('does nothing with default settings', (done) => {
-    const config = baseConfig({}, 'index_bundle.js');
+    const config = baseConfig({}, {}, 'index_bundle.js');
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
@@ -61,7 +62,8 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       {
         defaultAttribute: 'async'
       },
-        'index_bundle.js'
+      {},
+      'index_bundle.js'
     );
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
@@ -71,17 +73,54 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
+  it('sets async default for single script with hashing', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async'
+      },
+      {
+        hash: true
+      },
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js\?[0-9a-f]*" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
   it('sets defer default for single script', (done) => {
     const config = baseConfig(
       {
         defaultAttribute: 'defer'
       },
-        'index_bundle.js'
+      {},
+      'index_bundle.js'
     );
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/javascript" src="index_bundle.js" defer><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('sets defer default for single script', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'defer'
+      },
+      {
+        hash: true
+      },
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js\?[0-9a-f]*" defer><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -204,7 +243,8 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       {
         defaultAttribute: 'async'
       },
-        'index_bundle.js'
+      {},
+      'index_bundle.js'
     );
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     config.plugins.push(otherPlugin);
@@ -260,6 +300,25 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       /(<script type="text\/javascript" src="a.js" async><\/script>)/,
       /(<script>[\s\S]*<\/script>)/,
       /(<script type="text\/javascript" src="c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('inlining works for single script with hashing', (done) => {
+    const config = baseConfig(
+      {
+        inline: 'b',
+        defaultAttribute: 'async'
+      },
+      {
+        hash: true
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js\?[0-9a-f]*" async><\/script>)/,
+      /(<script>[\s\S]*<\/script>)/,
+      /(<script type="text\/javascript" src="c.js\?[0-9a-f]*" async><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -339,7 +398,11 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
   });
 
   it('works with handlebars template <script> elements', done => {
-    const config = baseConfig({}, 'index_bundle.js');
+    const config = baseConfig(
+        {},
+        {},
+        'index_bundle.js'
+      );
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     config.plugins = [
       new HtmlWebpackPlugin({
@@ -377,6 +440,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       {
         prefetch: ['index_bundle.js']
       },
+      {},
       'index_bundle.js'
     );
     config.entry = path.join(__dirname, 'fixtures/script1.js');
@@ -388,11 +452,31 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
+  it('adds prefetch resource hint for specific script with hashing', (done) => {
+    const config = baseConfig(
+      {
+        prefetch: ['index_bundle.js']
+      },
+      {
+        hash: true
+      },
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js\?[0-9a-f]*"><\/script>)/,
+      /(<link rel="prefetch" href="index_bundle.js\?[0-9a-f]*" as="script"\/)>/
+    ];
+    testPlugin(config, expected, done);
+  });
+
   it('adds preload resource hint for specific script', (done) => {
     const config = baseConfig(
       {
         preload: 'index_bundle.js'
       },
+      {},
       'index_bundle.js'
     );
     config.entry = path.join(__dirname, 'fixtures/script1.js');
