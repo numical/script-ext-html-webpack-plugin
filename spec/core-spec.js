@@ -73,7 +73,23 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('sets async default for single script with hashing', (done) => {
+  it('sets async default for single script with webpack chunk hashing', (done) => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async'
+      },
+      {},
+      'index_bundle[chunkhash].js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle[0-9a-f]*.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('sets async default for single script with html-webpack-plugin hashing', (done) => {
     const config = baseConfig(
       {
         defaultAttribute: 'async'
@@ -304,7 +320,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('inlining works for single script with hashing', (done) => {
+  it('inlining works for single script with html-webpack-plugin hashing', (done) => {
     const config = baseConfig(
       {
         inline: 'b',
@@ -350,12 +366,12 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
         defaultAttribute: 'async'
       }
     );
-    config.output.publicPath = '/subdomain/';
+    config.output.publicPath = '/subdomain/subdir/';
     const expected = baseExpectations();
     expected.html = [
-      /(<script type="text\/javascript" src="\/subdomain\/a.js" async><\/script>)/,
-      /(<script type="text\/javascript" src="\/subdomain\/b.js" async><\/script>)/,
-      /(<script type="text\/javascript" src="\/subdomain\/c.js" async><\/script>)/
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/c.js" async><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -364,16 +380,17 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     const config = baseConfig(
       {
         sync: 'a.js',
+        hash: true,
         async: ['b.js'],
         defer: 'c.js'
       }
     );
-    config.output.publicPath = '/subdomain/';
+    config.output.publicPath = '/subdomain/subdir/';
     const expected = baseExpectations();
     expected.html = [
-      /(<script type="text\/javascript" src="\/subdomain\/a.js"><\/script>)/,
-      /(<script type="text\/javascript" src="\/subdomain\/b.js" async><\/script>)/,
-      /(<script type="text\/javascript" src="\/subdomain\/c.js" defer><\/script>)/
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/a.js"><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/c.js" defer><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -389,10 +406,10 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       path.join(__dirname, 'fixtures/script2.js'),
       path.join(__dirname, 'fixtures/script3.js')
     ];
-    config.output.publicPath = '/subdomain/';
+    config.output.publicPath = '/subdomain/subdir/';
     const expected = baseExpectations();
     expected.html = [
-      /(<script type="text\/javascript" src="\/subdomain\/main.js" async><\/script>)/
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/main.js" async><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -452,7 +469,7 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('adds prefetch resource hint for specific script with hashing', (done) => {
+  it('adds prefetch resource hint for specific script with html-webpack-plugin hashing', (done) => {
     const config = baseConfig(
       {
         prefetch: ['index_bundle.js']

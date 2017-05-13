@@ -261,11 +261,12 @@ Change History
 --------------
 
 v1.7.x
-* updated for Webpack 2.5.x
+* updated for Webpack 2.5.x and updated all dependencies
 * adds asynchronous script resource hints
 * fixed [issue 13](https://github.com/numical/script-ext-html-webpack-plugin/issues/13) - inline functionality not working with HtmlWebpackPlugin hashing
 * fixed [issue 16](https://github.com/numical/script-ext-html-webpack-plugin/issues/16) - unnecessary <link> closing tag
 * fixed [issue 18](https://github.com/numical/script-ext-html-webpack-plugin/issues/18) - added defensive coding against unpopulated event arguments
+* refactored for better handling of `publicPath` - thanks @koalaink
 
 v1.6.x
 * works with webpack 2.2.1

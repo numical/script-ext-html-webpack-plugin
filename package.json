@@ -13,7 +13,7 @@
     "test:webpack1": "VERSION=webpack1 jasmine",
     "test:webpack2": "VERSION=webpack2 jasmine",
     "debug": "DEBUG=ScriptExt VERSION=webpack2 jasmine",
-    "node-debug": "DEBUG=ScriptExt VERSION=webpack2 node-debug jasmine"
+    "node-debug": "DEBUG=ScriptExt VERSION=webpack1 node-debug jasmine"
   },
   "repository": {
     "type": "git",
@@ -44,16 +44,16 @@
     "debug": "^2.6.3"
   },
   "devDependencies": {
-    "css-loader": "^0.27.3",
+    "css-loader": "^0.28.1",
     "dynavers": "^0.2.0",
-    "handlebars": "^4.0.6",
-    "handlebars-loader": "^1.4.0",
+    "handlebars": "^4.0.8",
+    "handlebars-loader": "^1.5.0",
     "html-webpack-plugin": "^2.28.0",
-    "jasmine": "^2.5.3",
-    "jasmine-spec-reporter": "^3.2.0",
+    "jasmine": "^2.6.0",
+    "jasmine-spec-reporter": "^4.1.0",
     "jasmine2-custom-message": "^0.8.2",
     "rimraf": "^2.6.1",
-    "semistandard": "^10.0.0"
+    "semistandard": "^11.0.0"
   },
   "peerDependencies": {
     "webpack": "1 || ^2.2.0"
