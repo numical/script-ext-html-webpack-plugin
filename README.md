@@ -10,6 +10,7 @@ functionality with different deployment options for your scripts including:
 - [`async`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
 - [`defer`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
 - [`type="module"`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
+- any custom attributes you wish to add;
 - inlining;
 - [`preload`](https://www.w3.org/TR/preload/) resource hint;
 - [`prefetch`](https://www.w3.org/TR/resource-hints/#dfn-prefetch) resource hint
@@ -17,7 +18,7 @@ functionality with different deployment options for your scripts including:
 This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
 
 The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) incorporates all webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to:
-- add attributes to these elements;
+- add standard and custom attributes to these elements;
 - inline the code in the elements;
 - add prefetch and preload resource hints for initial and dynamically loaded scripts.
 
@@ -82,6 +83,10 @@ You must pass a hash of configuration options to the plugin to cause the additio
 `type="module"` attribute (default: `[]`);
 - `preload`: a __script matching pattern__ defining scripts that should have accompanying preload resource hints (default: `[]`);
 - `prefetch`: a __script matching pattern__ defining scripts that should have accompanying prefetch resource hints (default: `[]`);
+- `custom`: a single hash or an array of hashes with the following structure:
+ - `test`: a **script matching pattern** defining scripts that should have a custom attribute added;
+ - `attribute`: a `String` attribute to add;
+ - `value`: (optional) a `String` value for the attribute; if not set the attribute has no value set (equivalent of `true`).
 
 A __script matching pattern__ matches against a script's name.  It can be one of:
 - a `String`-  matches if it is a substring of the script name;
@@ -175,7 +180,26 @@ plugins: [
 ]  
 ```
 
-
+All scripts have custom attribute `type='text/paperscript'` and ui.js also has a custom attribute of `id='1235'`:
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    custom: [
+      {
+        test: /\.js$/,
+        attribute: 'type',
+        value: 'text/paperscript'
+      },
+      {
+        test: 'ui.js',
+        attribute: 'id',
+        value: '12345'
+      }
+    ]
+  })
+]  
+```
 
 And so on, to craziness:
 ```javascript
@@ -259,6 +283,9 @@ Notes:
 
 Change History
 --------------
+
+v1.8.x
+* added custom attributes
 
 v1.7.x
 * updated for Webpack 2.5.x and updated all dependencies

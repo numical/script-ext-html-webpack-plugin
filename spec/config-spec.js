@@ -1,22 +1,22 @@
 /* eslint-env jasmine */
 'use strict';
 
-const denormaliseOptions = require('../lib/config.js');
-const DEFAULT_OPTIONS = denormaliseOptions.DEFAULT_OPTIONS;
+const normaliseOptions = require('../lib/config.js');
+const DEFAULT_OPTIONS = normaliseOptions.DEFAULT_OPTIONS;
 
 describe('Correctly understands all configuration permutations', () => {
   it('defaults all options if none passed', () => {
-    expect(denormaliseOptions()).toEqual(DEFAULT_OPTIONS);
+    expect(normaliseOptions()).toEqual(DEFAULT_OPTIONS);
   });
 
   it('defaults all options if null passed', () => {
-    expect(denormaliseOptions(null)).toEqual(DEFAULT_OPTIONS);
+    expect(normaliseOptions(null)).toEqual(DEFAULT_OPTIONS);
   });
 
   it('handles single default value', () => {
     const options = {defaultAttribute: 'async'};
     const expected = Object.assign({}, DEFAULT_OPTIONS, options);
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles single String pattern', () => {
@@ -26,7 +26,7 @@ describe('Correctly understands all configuration permutations', () => {
         test: ['*.js']
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles single Regex pattern', () => {
@@ -36,7 +36,7 @@ describe('Correctly understands all configuration permutations', () => {
         test: [/\*.js$/]
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles Array of String and Regex patterns', () => {
@@ -46,7 +46,7 @@ describe('Correctly understands all configuration permutations', () => {
         test: ['*.js', /\*.js$/]
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles hash configuration with single String for attribute', () => {
@@ -60,7 +60,7 @@ describe('Correctly understands all configuration permutations', () => {
         test: ['*.js']
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles full hash configuration for attribute', () => {
@@ -74,7 +74,7 @@ describe('Correctly understands all configuration permutations', () => {
         test: ['*.js', /\*.js$/]
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles single Regex pattern for resource hint', () => {
@@ -85,7 +85,7 @@ describe('Correctly understands all configuration permutations', () => {
         chunks: 'initial'
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles Array of String and Regex patterns for resource hint', () => {
@@ -96,7 +96,7 @@ describe('Correctly understands all configuration permutations', () => {
         chunks: 'initial'
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles partial hash configuration for resource hint', () => {
@@ -111,7 +111,7 @@ describe('Correctly understands all configuration permutations', () => {
         chunks: 'initial'
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles full hash configuration with single string for resource hint', () => {
@@ -127,7 +127,7 @@ describe('Correctly understands all configuration permutations', () => {
         chunks: 'all'
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles full hash configuration with array for resource hint', () => {
@@ -143,6 +143,77 @@ describe('Correctly understands all configuration permutations', () => {
         chunks: 'all'
       }
     });
-    expect(denormaliseOptions(options)).toEqual(expected);
+    expect(normaliseOptions(options)).toEqual(expected);
+  });
+
+  it('handles single no value custom attribute', () => {
+    const options = {custom: {
+      test: '*.js',
+      attribute: 'wibble'
+    }};
+    const expected = Object.assign({}, DEFAULT_OPTIONS, {
+      custom: [{
+        test: ['*.js'],
+        attribute: 'wibble',
+        value: true
+      }]
+    });
+    expect(normaliseOptions(options)).toEqual(expected);
+  });
+
+  it('handles single custom attribute with a value', () => {
+    const options = {custom: {
+      test: '*.js',
+      attribute: 'wibble',
+      value: 'wobble'
+    }};
+    const expected = Object.assign({}, DEFAULT_OPTIONS, {
+      custom: [{
+        test: ['*.js'],
+        attribute: 'wibble',
+        value: 'wobble'
+      }]
+    });
+    expect(normaliseOptions(options)).toEqual(expected);
+  });
+
+  it('handles multiple custom attributes', () => {
+    const options = {custom: [
+      {
+        test: '*.js',
+        attribute: 'wibble'
+      },
+      {
+        test: 'a',
+        attribute: 'wobble',
+        value: 'xyz'
+      },
+      {
+        test: 'b',
+        attribute: 'warble',
+        value: 'grunf'
+      }
+    ]};
+    const expected = Object.assign({}, DEFAULT_OPTIONS, {
+      custom: [
+        {
+          test: ['*.js'],
+          attribute: 'wibble',
+          value: true
+        },
+        {
+          test: ['a'],
+          attribute: 'wobble',
+          value: 'xyz'
+        },
+        {
+          test: ['b'],
+          attribute: 'warble',
+          value: 'grunf'
+        }
+
+      ]
+    });
+    expect(normaliseOptions(options)).toEqual(expected);
   });
 });

@@ -567,4 +567,71 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     ];
     testPlugin(config, expected, done);
   });
+
+  it('adds a custom attribute to a single script', (done) => {
+    const config = baseConfig(
+      {
+        custom: {
+          test: /.js$/,
+          attribute: 'customAttribute'
+        }
+      },
+      {},
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js" customAttribute><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('adds a custom attribute with a value to a single script', (done) => {
+    const config = baseConfig(
+      {
+        custom: {
+          test: /.js$/,
+          attribute: 'customAttribute',
+          value: 'xyz'
+        }
+      },
+      {},
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="index_bundle.js" customAttribute="xyz"><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('multiple customer attributes over multiple scripts', (done) => {
+    const config = baseConfig(
+      {
+        async: [/(a|c).*/, 'b'],
+        defer: /a.*/,
+        custom: [
+          {
+            test: /(a|c)/,
+            attribute: 'wibble'
+          },
+          {
+            test: 'a',
+            attribute: 'type',
+            value: 'text/paperscript'
+          }
+        ],
+        defaultAttribute: 'async'
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/paperscript" src="a.js" async wibble><\/script>)/,
+      /(<script type="text\/javascript" src="b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="c.js" async wibble><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 });
