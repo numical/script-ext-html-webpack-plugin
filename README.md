@@ -84,9 +84,9 @@ You must pass a hash of configuration options to the plugin to cause the additio
 - `preload`: a __script matching pattern__ defining scripts that should have accompanying preload resource hints (default: `[]`);
 - `prefetch`: a __script matching pattern__ defining scripts that should have accompanying prefetch resource hints (default: `[]`);
 - `custom`: a single hash or an array of hashes with the following structure:
- - `test`: a **script matching pattern** defining scripts that should have a custom attribute added;
- - `attribute`: a `String` attribute to add;
- - `value`: (optional) a `String` value for the attribute; if not set the attribute has no value set (equivalent of `true`).
+    - `test`: a **script matching pattern** defining scripts that should have a custom attribute added;
+    - `attribute`: a `String` attribute to add;
+    - `value`: (optional) a `String` value for the attribute; if not set the attribute has no value set (equivalent of `true`).
 
 A __script matching pattern__ matches against a script's name.  It can be one of:
 - a `String`-  matches if it is a substring of the script name;
