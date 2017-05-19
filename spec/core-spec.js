@@ -634,4 +634,29 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     ];
     testPlugin(config, expected, done);
   });
+
+  fit('issue 20', (done) => {
+    const config = baseConfig(
+      {
+        sync: /^a/,
+        defaultAttribute: 'defer',
+        custom: [
+          {
+            test: /^a/,
+            attribute: 'data-turbolinks-eval',
+            value: 'false'
+          }
+        ]
+      },
+      {},
+      '[name].[hash].js'
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.[0-9a-f]*.js" data-turbolinks-eval="false"><\/script>)/,
+      /(<script type="text\/javascript" src="b.[0-9a-f]*.js" defer><\/script>)/,
+      /(<script type="text\/javascript" src="c.[0-9a-f]*.js" defer><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
 });
