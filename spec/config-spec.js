@@ -1,6 +1,9 @@
 /* eslint-env jasmine */
 'use strict';
 
+const webpack = require('webpack');
+const WebpackConfig = require('webpack-config').default;
+const ScriptExtHtmlWebpackPlugin = require('../index.js');
 const normaliseOptions = require('../lib/config.js');
 const DEFAULT_OPTIONS = normaliseOptions.DEFAULT_OPTIONS;
 
@@ -215,5 +218,17 @@ describe('Correctly understands all configuration permutations', () => {
       ]
     });
     expect(normaliseOptions(options)).toEqual(expected);
+  });
+
+  it('works with webpack-config', () => {
+    const config = new WebpackConfig().merge({
+      plugins: [
+        new ScriptExtHtmlWebpackPlugin({
+          defaultAttribute: 'defer'
+        })
+      ]
+    });
+
+    expect(config.plugins[0].options.defaultAttribute).toEqual('defer');
   });
 });

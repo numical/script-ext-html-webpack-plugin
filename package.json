@@ -53,7 +53,8 @@
     "jasmine-spec-reporter": "^4.1.0",
     "jasmine2-custom-message": "^0.8.2",
     "rimraf": "^2.6.1",
-    "semistandard": "^11.0.0"
+    "semistandard": "^11.0.0",
+    "webpack-config": "^7.0.0"
   },
   "peerDependencies": {
     "webpack": "1 || ^2.2.0"
