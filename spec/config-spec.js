@@ -1,7 +1,6 @@
 /* eslint-env jasmine */
 'use strict';
 
-const webpack = require('webpack');
 const WebpackConfig = require('webpack-config').default;
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
 const normaliseOptions = require('../lib/config.js');

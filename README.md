@@ -286,6 +286,7 @@ Change History
 
 v1.8.x
 * added custom attributes
+* compatible with [webpack-config](https://www.npmjs.com/package/webpack-config) - thank s @avaly
 
 v1.7.x
 * updated for Webpack 2.5.x and updated all dependencies
