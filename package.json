@@ -1,6 +1,6 @@
 {
   "name": "script-ext-html-webpack-plugin",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "Enhances html-webpack-plugin functionality with async and defer attributes for script elements",
   "main": "index.js",
   "files": [
