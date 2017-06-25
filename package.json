@@ -9,11 +9,12 @@
   ],
   "scripts": {
     "pretest": "semistandard & install-module-versions dynavers.json",
-    "test": "VERSION=webpack1 jasmine && VERSION=webpack2 jasmine",
+    "test": "VERSION=webpack1 jasmine && VERSION=webpack2 jasmine && VERSION=webpack3 jasmine",
     "test:webpack1": "VERSION=webpack1 jasmine",
     "test:webpack2": "VERSION=webpack2 jasmine",
-    "debug": "DEBUG=ScriptExt VERSION=webpack2 jasmine",
-    "node-debug": "DEBUG=ScriptExt VERSION=webpack1 node-debug jasmine"
+    "test:webpack3": "VERSION=webpack3 jasmine",
+    "debug": "DEBUG=ScriptExt VERSION=webpack3 jasmine",
+    "node-debug": "DEBUG=ScriptExt VERSION=webpack3 node-debug jasmine"
   },
   "repository": {
     "type": "git",

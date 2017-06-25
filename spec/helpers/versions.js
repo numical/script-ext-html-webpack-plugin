@@ -4,14 +4,13 @@ const setModuleVersion = require('dynavers')('dynavers.json');
 
 const VERSIONS = {
   webpack1: {
-    isWebpack1: true,
-    isWebpack2: false,
     webpack: '1.14.0'
   },
   webpack2: {
-    isWebpack1: false,
-    isWebpack2: true,
-    webpack: '2.5.1'
+    webpack: '2.6.1'
+  },
+  webpack3: {
+    webpack: '3.0.0'
   }
 };
 
