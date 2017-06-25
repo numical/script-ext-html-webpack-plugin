@@ -376,6 +376,22 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
+  it('handles output.publicPath without end separator', done => {
+    const config = baseConfig(
+      {
+        defaultAttribute: 'async'
+      }
+    );
+    config.output.publicPath = '/subdomain/subdir';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/a.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/b.js" async><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/subdir\/c.js" async><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
   it('named scripts work with output.publicPath', done => {
     const config = baseConfig(
       {
@@ -557,6 +573,25 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       }
     );
     config.output.publicPath = '/subdomain/';
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="\/subdomain\/a.js"><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/b.js"><\/script>)/,
+      /(<script type="text\/javascript" src="\/subdomain\/c.js"><\/script>)/,
+      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script"\/)>/,
+      /(<link rel="preload" href="\/subdomain\/b.js" as="script"\/)>/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('preload and prefetch handle output.publicPath without end separator', (done) => {
+    const config = baseConfig(
+      {
+        prefetch: [/^a/],
+        preload: /^b/
+      }
+    );
+    config.output.publicPath = '/subdomain';
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/javascript" src="\/subdomain\/a.js"><\/script>)/,

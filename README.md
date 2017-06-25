@@ -291,7 +291,8 @@ Change History
 v1.8.x
 * added custom attributes
 * compatible with [webpack-config](https://www.npmjs.com/package/webpack-config) - thank s @avaly
-* node v8+ testing
+* node v8+ and webback 3.x testing
+* resource hints handle public paths without end separators (thanks @albv)
 
 v1.7.x
 * updated for Webpack 2.5.x and updated all dependencies
