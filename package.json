@@ -58,6 +58,6 @@
     "webpack-config": "^7.0.0"
   },
   "peerDependencies": {
-    "webpack": "1 || ^2.2.0"
+    "webpack": "1 || ^2.2.0 || ^3.0.0"
   }
 }
