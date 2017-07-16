@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "pretest": "semistandard & install-module-versions dynavers.json",
+    "pretest:appveyor": "semistandard & install-module-versions dynavers.json",
     "test": "VERSION=webpack1 jasmine && VERSION=webpack2 jasmine && VERSION=webpack3 jasmine",
     "test:webpack1": "VERSION=webpack1 jasmine",
     "test:webpack2": "VERSION=webpack2 jasmine",
