@@ -8,36 +8,26 @@ branches:
 
 environment:
   matrix:
-    - nodejs_version: 4
-      VERSION: webpack3
-    - nodejs_version: 4
-      VERSION: webpack2
-    - nodejs_version: 4
-      VERSION: webpack1
-    - nodejs_version: 5
-      VERSION: webpack3
-    - nodejs_version: 5
-      VERSION: webpack2
-    - nodejs_version: 5
-      VERSION: webpack1
-    - nodejs_version: 6
-      VERSION: webpack3
-    - nodejs_version: 6
-      VERSION: webpack2
-    - nodejs_version: 6
-      VERSION: webpack1
-    - nodejs_version: 7
-      VERSION: webpack3
-    - nodejs_version: 7
-      VERSION: webpack2
-    - nodejs_version: 7
-      VERSION: webpack1
     - nodejs_version: 8
       VERSION: webpack3
     - nodejs_version: 8
       VERSION: webpack2
-    - nodejs_version: 8
-      VERSION: webpack1
+    - nodejs_version: 7
+      VERSION: webpack3
+    - nodejs_version: 7
+      VERSION: webpack2
+    - nodejs_version: 6
+      VERSION: webpack3
+    - nodejs_version: 6
+      VERSION: webpack2
+    - nodejs_version: 5
+      VERSION: webpack3
+    - nodejs_version: 5
+      VERSION: webpack2
+    - nodejs_version: 4
+      VERSION: webpack3
+    - nodejs_version: 4
+      VERSION: webpack2
 
 version: "{build}"
 build: off
