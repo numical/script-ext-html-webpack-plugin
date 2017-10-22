@@ -55,7 +55,7 @@
     "jasmine2-custom-message": "^0.8.4",
     "rimraf": "^2.6.2",
     "semistandard": "^11.0.0",
-    "webpack-config": "^7.5.0"
+    "webpack-config": "7.0.0"
   },
   "peerDependencies": {
     "webpack": "1 || ^2.2.0 || ^3.0.0"
