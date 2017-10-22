@@ -295,7 +295,7 @@ v1.8.x
 * resource hints handle public paths without end separators (thanks @albv)
 * updated dependencies (including dev and peer) - thanks @ai, @malikshahzad228
 * windows-proofed public paths - thanks @mstijak, @Jesseyx
-* added appveyor support for windows build and testing
+* added appveyor support for windows build and testing - CURRENTLY SWITCHED OFF
 
 v1.7.x
 * updated for Webpack 2.5.x and updated all dependencies

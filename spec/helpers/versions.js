@@ -10,7 +10,7 @@ const VERSIONS = {
     webpack: '2.6.1'
   },
   webpack3: {
-    webpack: '3.0.0'
+    webpack: '3.8.1'
   }
 };
 
