@@ -24,7 +24,7 @@ The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plug
 
 Installation
 ------------
-You must be running webpack (1.x or 2.x) )on node 4+.
+You must be running webpack (1.x, 2.x, 3.x) )on node 4+.
 
 Install the plugin with npm:
 ```shell
@@ -289,7 +289,7 @@ Change History
 --------------
 
 v1.8.x
-* added custom attributes
+* added custom attributes - now wok on inline scrits as well e.g. for CSP nonces, -thanks @niieani and @phallguy
 * compatible with [webpack-config](https://www.npmjs.com/package/webpack-config) - thank s @avaly
 * node v8+ and webback 3.x testing
 * resource hints handle public paths without end separators (thanks @albv)

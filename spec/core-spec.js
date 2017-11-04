@@ -642,6 +642,26 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
+  it('custom attributes work with inlined scripts (e.g. nonces)', (done) => {
+    const config = baseConfig(
+      {
+        inline: 'b',
+        custom: {
+          test: /^$/,
+          attribute: 'nonce',
+          value: 'abcde'
+        }
+      }
+    );
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script type="text\/javascript" src="a.js"><\/script>)/,
+      /(<script nonce="abcde">)/,
+      /(<script type="text\/javascript" src="c.js"><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
   it('multiple customer attributes over multiple scripts', (done) => {
     const config = baseConfig(
       {
