@@ -289,8 +289,8 @@ Change History
 --------------
 
 v1.8.x
-* added custom attributes - now wok on inline scrits as well e.g. for CSP nonces, -thanks @niieani and @phallguy
-* compatible with [webpack-config](https://www.npmjs.com/package/webpack-config) - thank s @avaly
+* added custom attributes - now works on inline scripts as well e.g. for CSP nonces, -thanks @niieani and @phallguy
+* compatible with [webpack-config](https://www.npmjs.com/package/webpack-config) - thanks @avaly
 * node v8+ and webback 3.x testing
 * resource hints handle public paths without end separators (thanks @albv)
 * updated dependencies (including dev and peer) - thanks @ai, @malikshahzad228
