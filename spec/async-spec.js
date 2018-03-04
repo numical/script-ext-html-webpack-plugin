@@ -11,7 +11,7 @@ const testPlugin = require('./helpers/core-test.js');
 const OUTPUT_DIR = path.join(__dirname, '../dist');
 
 const baseConfig = (scriptExtOptions) => {
-  return {
+  const config = {
     entry: path.join(__dirname, 'fixtures/async_script.js'),
     output: {
       path: OUTPUT_DIR,
@@ -23,6 +23,10 @@ const baseConfig = (scriptExtOptions) => {
       new ScriptExtHtmlWebpackPlugin(scriptExtOptions)
     ]
   };
+  if (isWebpack4()) {
+    config.mode = 'development';
+  }
+  return config;
 };
 
 const baseExpectations = () => ({
@@ -37,22 +41,32 @@ const baseExpectations = () => ({
 });
 
 const expectedFiles = () => {
-  return isWebpack1()
-    ? [
+  if (isWebpack1()) {
+    return [
       'index.html',
       'index_bundle.js',
       'async-chunk1.js',
       'async-chunk2.js'
-    ]
-    : [
+    ];
+  } else if (isWebpack4()) {
+    return [
+      'index.html',
+      'index_bundle.js',
+      'async-chunkdynamic2.js',
+      'async-chunkdynamic3.js'
+    ];
+  } else {
+    return [
       'index.html',
       'index_bundle.js',
       'async-chunk0.js',
       'async-chunk1.js'
     ];
+  }
 };
 
 const isWebpack1 = () => version.webpack.startsWith('1');
+const isWebpack4 = () => version.webpack.startsWith('4');
 
 describe(`Async functionality (webpack ${version.webpack})`, function () {
   beforeEach((done) => {
@@ -75,6 +89,12 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
         /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
         /(<link rel="preload" href="async-chunk1.js" as="script"\/)>/,
         /(<link rel="preload" href="async-chunk2.js" as="script"\/)>/
+      ];
+    } else if (isWebpack4()) {
+      expected.html = [
+        /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+        /(<link rel="preload" href="async-chunkdynamic2.js" as="script"\/)>/,
+        /(<link rel="preload" href="async-chunkdynamic3.js" as="script"\/)>/
       ];
     } else {
       expected.html = [
@@ -103,6 +123,12 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
         /(<link rel="prefetch" href="async-chunk1.js" as="script"\/)>/,
         /(<link rel="prefetch" href="async-chunk2.js" as="script"\/)>/
       ];
+    } else if (isWebpack4()) {
+      expected.html = [
+        /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+        /(<link rel="prefetch" href="async-chunkdynamic2.js" as="script"\/)>/,
+        /(<link rel="prefetch" href="async-chunkdynamic3.js" as="script"\/)>/
+      ];
     } else {
       expected.html = [
         /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
@@ -118,19 +144,30 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
       {
         defaultAttribute: 'async',
         prefetch: {
-          test: ['1'],
+          test: [isWebpack4() ? '3' : '1'],
           chunks: 'async'
         }
       }
     );
     const expected = baseExpectations();
-    expected.html = [
-      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
-      /(<link rel="prefetch" href="async-chunk1.js" as="script"\/)>/
-    ];
+    if (isWebpack4()) {
+      expected.html = [
+        /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+        /(<link rel="prefetch" href="async-chunkdynamic3.js" as="script"\/)>/
+      ];
+    } else {
+      expected.html = [
+        /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+        /(<link rel="prefetch" href="async-chunk1.js" as="script"\/)>/
+      ];
+    }
     if (isWebpack1()) {
       expected.not.html = [
         /(<link rel="prefetch" href="async-chunk0.js" as="script"\/)>/
+      ];
+    } else if (isWebpack4()) {
+      expected.not.html = [
+        /(<link rel="prefetch" href="async-chunkdynamic2.js" as="script"\/)>/
       ];
     } else {
       expected.not.html = [
@@ -149,7 +186,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
           chunks: 'async'
         },
         preload: {
-          test: '1',
+          test: isWebpack4() ? '3' : '1',
           chunks: 'async'
         }
       }
@@ -160,6 +197,12 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
         /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
         /(<link rel="preload" href="async-chunk1.js" as="script"\/)>/,
         /(<link rel="prefetch" href="async-chunk2.js" as="script"\/)>/
+      ];
+    } else if (isWebpack4()) {
+      expected.html = [
+        /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+        /(<link rel="prefetch" href="async-chunkdynamic2.js" as="script"\/)>/,
+        /(<link rel="preload" href="async-chunkdynamic3.js" as="script"\/)>/
       ];
     } else {
       expected.html = [
@@ -188,6 +231,13 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
         /(<link rel="preload" href="index_bundle.js" as="script"\/)>/,
         /(<link rel="preload" href="async-chunk1.js" as="script"\/)>/,
         /(<link rel="preload" href="async-chunk2.js" as="script"\/)>/
+      ];
+    } else if (isWebpack4()) {
+      expected.html = [
+        /(<script type="text\/javascript" src="index_bundle.js" defer><\/script>)/,
+        /(<link rel="preload" href="index_bundle.js" as="script"\/)>/,
+        /(<link rel="preload" href="async-chunkdynamic2.js" as="script"\/)>/,
+        /(<link rel="preload" href="async-chunkdynamic3.js" as="script"\/)>/
       ];
     } else {
       expected.html = [
@@ -247,6 +297,12 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
         /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"\/)>/,
         /(<link rel="preload" href="\/subdomain\/async-chunk2.js" as="script"\/)>/
       ];
+    } else if (isWebpack4()) {
+      expected.html = [
+        /(<script type="text\/javascript" src="\/subdomain\/index_bundle.js" async><\/script>)/,
+        /(<link rel="preload" href="\/subdomain\/async-chunkdynamic2.js" as="script"\/)>/,
+        /(<link rel="preload" href="\/subdomain\/async-chunkdynamic3.js" as="script"\/)>/
+      ];
     } else {
       expected.html = [
         /(<script type="text\/javascript" src="\/subdomain\/index_bundle.js" async><\/script>)/,
@@ -275,6 +331,13 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
         /(<link rel="preload" href="\/subdomain\/index_bundle.js" as="script"\/)>/,
         /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"\/)>/,
         /(<link rel="preload" href="\/subdomain\/async-chunk2.js" as="script"\/)>/
+      ];
+    } else if (isWebpack4()) {
+      expected.html = [
+        /(<script type="text\/javascript" src="\/subdomain\/index_bundle.js" async><\/script>)/,
+        /(<link rel="preload" href="\/subdomain\/index_bundle.js" as="script"\/)>/,
+        /(<link rel="preload" href="\/subdomain\/async-chunkdynamic2.js" as="script"\/)>/,
+        /(<link rel="preload" href="\/subdomain\/async-chunkdynamic3.js" as="script"\/)>/
       ];
     } else {
       expected.html = [

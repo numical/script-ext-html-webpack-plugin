@@ -11,6 +11,9 @@ const VERSIONS = {
   },
   webpack3: {
     webpack: '3.8.1'
+  },
+  webpack4: {
+    webpack: '4.0.1'
   }
 };
 
