@@ -9,10 +9,11 @@
   ],
   "scripts": {
     "pretest": "semistandard & install-module-versions dynavers.json",
-    "test": "VERSION=webpack1 jasmine && VERSION=webpack2 jasmine && VERSION=webpack3 jasmine",
+    "test": "VERSION=webpack1 jasmine && VERSION=webpack2 jasmine && VERSION=webpack3 jasmine && VERSION=webpack4 jasmine",
     "test:webpack1": "VERSION=webpack1 jasmine",
     "test:webpack2": "VERSION=webpack2 jasmine",
     "test:webpack3": "VERSION=webpack3 jasmine",
+    "test:webpack4": "VERSION=webpack4 jasmine",
     "debug": "DEBUG=ScriptExt VERSION=webpack3 jasmine",
     "node-debug": "DEBUG=ScriptExt VERSION=webpack3 node-debug jasmine"
   },
@@ -45,11 +46,12 @@
     "debug": "^3.1.0"
   },
   "devDependencies": {
+    "uglifyjs-webpack-plugin": "^1.2.2",
     "css-loader": "^0.28.7",
     "dynavers": "^0.2.0",
     "handlebars": "^4.0.11",
     "handlebars-loader": "^1.6.0",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^3.0.4",
     "jasmine": "^2.8.0",
     "jasmine-spec-reporter": "^4.2.1",
     "jasmine2-custom-message": "^0.8.4",
@@ -58,6 +60,6 @@
     "webpack-config": "7.0.0"
   },
   "peerDependencies": {
-    "webpack": "1 || ^2.2.0 || ^3.0.0"
+    "webpack": "1 || ^2.2.0 || ^3.0.0 || ^4.0.0"
   }
 }

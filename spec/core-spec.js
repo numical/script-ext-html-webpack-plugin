@@ -8,13 +8,16 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
 const testPlugin = require('./helpers/core-test.js');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+const isWebpack4 = () => version.webpack.startsWith('4');
 
 const OUTPUT_DIR = path.join(__dirname, '../dist');
 
 const baseConfig = (scriptExtOptions, htmlWebpackOptions, outputFilename) => {
   htmlWebpackOptions = htmlWebpackOptions || {};
   outputFilename = outputFilename || '[name].js';
-  return {
+  const config = {
     entry: {
       a: path.join(__dirname, 'fixtures/script1.js'),
       b: path.join(__dirname, 'fixtures/script2.js'),
@@ -29,6 +32,10 @@ const baseConfig = (scriptExtOptions, htmlWebpackOptions, outputFilename) => {
       new ScriptExtHtmlWebpackPlugin(scriptExtOptions)
     ]
   };
+  if (isWebpack4()) {
+    config.mode = 'development';
+  }
+  return config;
 };
 
 const baseExpectations = () => ({
@@ -246,7 +253,9 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
         compiler.plugin('compilation', compilation => {
           compilation.plugin('html-webpack-plugin-after-html-processing', (htmlPluginData, callback) => {
             otherPluginCalled = true;
-            callback(null, htmlPluginData);
+            if (callback) {
+              callback(null, htmlPluginData);
+            }
           });
         });
       }
@@ -350,11 +359,18 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       simple1: path.join(__dirname, 'fixtures/simplescript1.js'),
       simple2: path.join(__dirname, 'fixtures/simplescript2.js')
     };
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+    if (isWebpack4()) {
+      config.optimization = {
+        minimize : true,
+        minimizer: [new UglifyJsPlugin()]
+      };
+    } else {
+      config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+    }
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/javascript" src="a.js"><\/script>)/,
-      /(<script>.*console\.log\("it works!"\).*<\/script>)/,
+      isWebpack4() ? /(<script>.*console\.log\('it works!'\).*<\/script>)/ : /(<script>.*console\.log\("it works!"\).*<\/script>)/,
       /(<script>.*Date\.now\(\).*<\/script>)/
     ];
     testPlugin(config, expected, done);
