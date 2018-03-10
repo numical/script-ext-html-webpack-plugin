@@ -24,7 +24,9 @@ The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plug
 
 Installation
 ------------
-You must be running webpack (1.x, 2.x, 3.x) )on node 4+.
+You must be running webpack (2.x, 3.x, 4.x) on node 5+.
+
+For those requiring earlier versions of webpack or node, please use 
 
 Install the plugin with npm:
 ```shell
