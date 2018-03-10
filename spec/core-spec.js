@@ -7,6 +7,7 @@ const version = require('./helpers/versions.js');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('../index.js');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const testPlugin = require('./helpers/core-test.js');
 
 const OUTPUT_DIR = path.join(__dirname, '../dist');
@@ -14,7 +15,7 @@ const OUTPUT_DIR = path.join(__dirname, '../dist');
 const baseConfig = (scriptExtOptions, htmlWebpackOptions, outputFilename) => {
   htmlWebpackOptions = htmlWebpackOptions || {};
   outputFilename = outputFilename || '[name].js';
-  return {
+  const config = {
     entry: {
       a: path.join(__dirname, 'fixtures/script1.js'),
       b: path.join(__dirname, 'fixtures/script2.js'),
@@ -29,6 +30,10 @@ const baseConfig = (scriptExtOptions, htmlWebpackOptions, outputFilename) => {
       new ScriptExtHtmlWebpackPlugin(scriptExtOptions)
     ]
   };
+  if (version.major === 4) {
+    config.mode = 'production';
+  }
+  return config;
 };
 
 const baseExpectations = () => ({
@@ -42,7 +47,7 @@ const baseExpectations = () => ({
   }
 });
 
-describe(`Core functionality (webpack ${version.webpack})`, function () {
+describe(`Core functionality (webpack ${version.display})`, function () {
   beforeEach((done) => {
     deleteDir(OUTPUT_DIR, done);
   });
@@ -246,7 +251,10 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
         compiler.plugin('compilation', compilation => {
           compilation.plugin('html-webpack-plugin-after-html-processing', (htmlPluginData, callback) => {
             otherPluginCalled = true;
-            callback(null, htmlPluginData);
+            // no callback webpack v4+
+            if (callback) {
+              callback(null, htmlPluginData);
+            }
           });
         });
       }
@@ -350,7 +358,14 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
       simple1: path.join(__dirname, 'fixtures/simplescript1.js'),
       simple2: path.join(__dirname, 'fixtures/simplescript2.js')
     };
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+    if (version.major < 4) {
+      config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+    } else {
+      config.optimization = {
+        minimize: true,
+        minimizer: [new UglifyJsPlugin()]
+      };
+    }
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/javascript" src="a.js"><\/script>)/,
@@ -430,29 +445,31 @@ describe(`Core functionality (webpack ${version.webpack})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('works with handlebars template <script> elements', done => {
-    const config = baseConfig(
+  if (version.major < 4) {
+    it('works with handlebars template <script> elements', done => {
+      const config = baseConfig(
         {},
         {},
         'index_bundle.js'
       );
-    config.entry = path.join(__dirname, 'fixtures/script1.js');
-    config.plugins = [
-      new HtmlWebpackPlugin({
-        template: '!!handlebars-loader!spec/fixtures/handlebars_template.hbs',
-        testMsg: 'Hello World'
-      }),
-      new ScriptExtHtmlWebpackPlugin({
-        defaultAttribute: 'async'
-      })
-    ];
-    const expected = baseExpectations();
-    expected.html = [
-      /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
-      /(<script>[\s\S]*Hello World[\s\S]*<\/script>)/
-    ];
-    testPlugin(config, expected, done);
-  });
+      config.entry = path.join(__dirname, 'fixtures/script1.js');
+      config.plugins = [
+        new HtmlWebpackPlugin({
+          template: '!!handlebars-loader!spec/fixtures/handlebars_template.hbs',
+          testMsg: 'Hello World'
+        }),
+        new ScriptExtHtmlWebpackPlugin({
+          defaultAttribute: 'async'
+        })
+      ];
+      const expected = baseExpectations();
+      expected.html = [
+        /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
+        /(<script>[\s\S]*Hello World[\s\S]*<\/script>)/
+      ];
+      testPlugin(config, expected, done);
+    });
+  }
 
   it('inline scripts work with output.publicPath', done => {
     const config = baseConfig(

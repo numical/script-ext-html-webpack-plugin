@@ -5,7 +5,7 @@ Script Extension for HTML Webpack Plugin
 [![NPM](https://nodei.co/npm/script-ext-html-webpack-plugin.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/script-ext-html-webpack-plugin/)
 
 
-Enhances [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin)
+Enhances [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 functionality with different deployment options for your scripts including:
 - [`async`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
 - [`defer`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
@@ -15,25 +15,28 @@ functionality with different deployment options for your scripts including:
 - [`preload`](https://www.w3.org/TR/preload/) resource hint;
 - [`prefetch`](https://www.w3.org/TR/resource-hints/#dfn-prefetch) resource hint
 
-This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
+This is an extension plugin for the [webpack](http://webpack.github.io) plugin [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) - a plugin that simplifies the creation of HTML files to serve your webpack bundles.
 
-The raw [html-webpack-plugin](https://github.com/ampedandwired/html-webpack-plugin) incorporates all webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to:
+The raw [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) incorporates all webpack-generated javascipt as synchronous`<script>` elements in the generated html.  This plugin allows you to:
 - add standard and custom attributes to these elements;
 - inline the code in the elements;
 - add prefetch and preload resource hints for initial and dynamically loaded scripts.
 
 Installation
 ------------
-You must be running webpack (2.x, 3.x, 4.x) on node 5+.
-
-For those requiring earlier versions of webpack or node, please use 
-
+You must be running webpack (1.x, 2.x, 3.x, 4.x) on node 6+.
 Install the plugin with npm:
 ```shell
-$ npm install --save-dev script-ext-html-webpack-plugin
+$ npm install script-ext-html-webpack-plugin
+```
+Not that you will need v3.0.6+ of [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
+
+For those requiring earlier versions of node, please use the [last 1.x version](https://github.com/numical/script-ext-html-webpack-plugin/tree/v1.8.8) of this plugin.  However please note this does not have webpack 4.x support:
+```shell
+$ npm install script-ext-html-webpack-plugin@1.8.8
 ```
 
-You may see an `UNMET PEER DEPENDENCY` warning for webpack.
+You may see an `UNMET PEER DEPENDENCY` warnings for webpack and various plugins.
 
 This is fine; in testing, we dynamically download multiple versions of webpack (via the [dynavers](https://github.com/numical/dynavers) module).
 
@@ -254,7 +257,7 @@ Several notes and caveats apply:
 * This feature is for `<script>`'s only. If you wish to inline css please see the sister plugin
 [style-ext-html-webpack-plugin](https://github.com/numical/style-ext-html-webpack-plugin).
 * Even the simplest script will be wrapped with webpack boilerplate; ensure you minify your javascript if you want your output html to be legible!
-* Hot replacement of inlined scripts will only work if caching is [switched off](https://github.com/ampedandwired/html-webpack-plugin#configuration) for html-webpack-plugin:
+* Hot replacement of inlined scripts will only work if caching is [switched off](https://github.com/jantimon/html-webpack-plugin#configuration) for html-webpack-plugin:
 ```javascript
 plugins: [
     new HtmlWebpackPlugin({
@@ -265,7 +268,7 @@ plugins: [
     })
 ]
 ```
-* An alternative approach, based on jade templates is illustrated in the [HtmlWebpackPlugin inline example](https://github.com/ampedandwired/html-webpack-plugin/tree/master/examples/inline).
+* An alternative approach, based on jade templates is illustrated in the [HtmlWebpackPlugin inline example](https://github.com/jantimon/html-webpack-plugin/tree/master/examples/inline).
 
 
 Resource Hints
@@ -290,13 +293,20 @@ Notes:
 Change History
 --------------
 
+v2.0.x
+* support webpack 4.x - huge thanks to [@sherlock1982](https://github.com/sherlock1982)
+* node 9.x testing
+* remove support for node 4.x and 5.x
+* remove Appveyor config
+* temororary remove  Handlebars test until loader supports webpack 4.x
+
 v1.8.x
-* added custom attributes - now works on inline scripts as well e.g. for CSP nonces, -thanks @niieani and @phallguy
-* compatible with [webpack-config](https://www.npmjs.com/package/webpack-config) - thanks @avaly
+* added custom attributes - now works on inline scripts as well e.g. for CSP nonces, -thanks [@niieani](https://github.com/niieani) and [@phallguy](https://github.com/phallguy)
+* compatible with [webpack-config](https://www.npmjs.com/package/webpack-config) - thanks [@avaly](https://github.com/avaly)
 * node v8+ and webback 3.x testing
-* resource hints handle public paths without end separators (thanks @albv)
-* updated dependencies (including dev and peer) - thanks @ai, @malikshahzad228
-* windows-proofed public paths - thanks @mstijak, @Jesseyx
+* resource hints handle public paths without end separators - thanks [@albv](https://githun.com/albv)
+* updated dependencies (including dev and peer) - thanks [@ai](https://github.com/ai), [@malikshahzad228](https://github.com/malikshahzad228)
+* windows-proofed public paths - thanks [@mstijak](https://github.com/mstijak), [@Jesseyx](https://github.com/Jesseyx)
 * added appveyor support for windows build and testing - CURRENTLY SWITCHED OFF
 
 v1.7.x
@@ -305,7 +315,7 @@ v1.7.x
 * fixed [issue 13](https://github.com/numical/script-ext-html-webpack-plugin/issues/13) - inline functionality not working with HtmlWebpackPlugin hashing
 * fixed [issue 16](https://github.com/numical/script-ext-html-webpack-plugin/issues/16) - unnecessary <link> closing tag
 * fixed [issue 18](https://github.com/numical/script-ext-html-webpack-plugin/issues/18) - added defensive coding against unpopulated event arguments
-* refactored for better handling of `publicPath` - thanks @koalaink
+* refactored for better handling of `publicPath` - thanks [@koalaink](https://github.com/koalaink)
 
 v1.6.x
 * works with webpack 2.2.1
@@ -317,13 +327,13 @@ v1.5.x
 * works with webpack 2.2.0
 
 v1.4.x
-* updated internal mechanism to use new(ish) [HtmlWebpackPlugin event](https://github.com/ampedandwired/html-webpack-plugin#events)
+* updated internal mechanism to use new(ish) [HtmlWebpackPlugin event](https://github.com/jantimon/html-webpack-plugin#events)
 * improved test mechanism and enhanced test coverage
-* added support for `publicPath` for inline scripts (thanks @JustAboutJeff)
-* works with 'webpack -p' (thanks @brandongoode)
+* added support for `publicPath` for inline scripts - thanks [@JustAboutJeff](https://github.com/JustAboutJeff)
+* works with 'webpack -p' - thanks [@brandongoode](https://github.com/brandongoode)
 
 v1.3.x
-* added `type="text/javascript"` by default, in response to [Safari 9.1.1 bug](https://github.com/ampedandwired/html-webpack-plugin/issues/309)
+* added `type="text/javascript"` by default, in response to [Safari 9.1.1 bug](https://github.com/jantimon/html-webpack-plugin/issues/309)
 * removed experimental status of inline option
 * added weback 2.2.x beta support
 

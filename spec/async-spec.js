@@ -11,7 +11,7 @@ const testPlugin = require('./helpers/core-test.js');
 const OUTPUT_DIR = path.join(__dirname, '../dist');
 
 const baseConfig = (scriptExtOptions) => {
-  return {
+  const config = {
     entry: path.join(__dirname, 'fixtures/async_script.js'),
     output: {
       path: OUTPUT_DIR,
@@ -23,6 +23,10 @@ const baseConfig = (scriptExtOptions) => {
       new ScriptExtHtmlWebpackPlugin(scriptExtOptions)
     ]
   };
+  if (version.major === 4) {
+    config.mode = 'production';
+  }
+  return config;
 };
 
 const baseExpectations = () => ({
@@ -37,7 +41,7 @@ const baseExpectations = () => ({
 });
 
 const expectedFiles = () => {
-  return isWebpack1()
+  return version.major === 1
     ? [
       'index.html',
       'index_bundle.js',
@@ -52,9 +56,7 @@ const expectedFiles = () => {
     ];
 };
 
-const isWebpack1 = () => version.webpack.startsWith('1');
-
-describe(`Async functionality (webpack ${version.webpack})`, function () {
+describe(`Async functionality (webpack ${version.display})`, function () {
   beforeEach((done) => {
     deleteDir(OUTPUT_DIR, done);
   });
@@ -70,7 +72,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
       }
     );
     const expected = baseExpectations();
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.html = [
         /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
         /(<link rel="preload" href="async-chunk1.js" as="script"\/)>/,
@@ -97,7 +99,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
       }
     );
     const expected = baseExpectations();
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.html = [
         /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
         /(<link rel="prefetch" href="async-chunk1.js" as="script"\/)>/,
@@ -128,7 +130,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
       /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
       /(<link rel="prefetch" href="async-chunk1.js" as="script"\/)>/
     ];
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.not.html = [
         /(<link rel="prefetch" href="async-chunk0.js" as="script"\/)>/
       ];
@@ -155,7 +157,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
       }
     );
     const expected = baseExpectations();
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.html = [
         /(<script type="text\/javascript" src="index_bundle.js" async><\/script>)/,
         /(<link rel="preload" href="async-chunk1.js" as="script"\/)>/,
@@ -182,7 +184,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
       }
     );
     const expected = baseExpectations();
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.html = [
         /(<script type="text\/javascript" src="index_bundle.js" defer><\/script>)/,
         /(<link rel="preload" href="index_bundle.js" as="script"\/)>/,
@@ -215,7 +217,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
       /(<script type="text\/javascript" src="index_bundle.js" defer><\/script>)/,
       /(<link rel="preload" href="index_bundle.js" as="script"\/)>/
     ];
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.not.html = [
         /(<link rel="preload" href="async-chunk1.js" as="script"\/)>/,
         /(<link rel="preload" href="async-chunk2.js" as="script"\/)>/
@@ -241,7 +243,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
     );
     config.output.publicPath = '/subdomain/';
     const expected = baseExpectations();
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.html = [
         /(<script type="text\/javascript" src="\/subdomain\/index_bundle.js" async><\/script>)/,
         /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"\/)>/,
@@ -269,7 +271,7 @@ describe(`Async functionality (webpack ${version.webpack})`, function () {
     );
     config.output.publicPath = '/subdomain';
     const expected = baseExpectations();
-    if (isWebpack1()) {
+    if (version.major === 1) {
       expected.html = [
         /(<script type="text\/javascript" src="\/subdomain\/index_bundle.js" async><\/script>)/,
         /(<link rel="preload" href="\/subdomain\/index_bundle.js" as="script"\/)>/,
