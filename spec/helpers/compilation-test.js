@@ -8,14 +8,16 @@ const OUTPUT_DIR = path.join(__dirname, '../../dist');
 
 module.exports = (err, stats, expected, done) => {
   testError(err);
-  testCompilation(stats.compilation.errors);
-  testCompilation(stats.compilation.warnings);
-  testFilesExistence(expected.files, true);
-  testFilesExistence(expected.not.files, false);
-  testFileContent('index.html', expected.html, true);
-  testFileContent('index.html', expected.not.html, false);
-  testFileContent('index_bundle.js', expected.js, true);
-  testFileContent('index_bundle.js', expected.not.js, false);
+  if (!err) {
+    testCompilation(stats.compilation.errors);
+    testCompilation(stats.compilation.warnings);
+    testFilesExistence(expected.files, true);
+    testFilesExistence(expected.not.files, false);
+    testFileContent('index.html', expected.html, true);
+    testFileContent('index.html', expected.not.html, false);
+    testFileContent('index_bundle.js', expected.js, true);
+    testFileContent('index_bundle.js', expected.not.js, false);
+  }
   done();
 };
 

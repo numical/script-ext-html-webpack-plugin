@@ -245,18 +245,28 @@ describe(`Core functionality (webpack ${version.display})`, function () {
   });
 
   it('plays happily with other plugins on the same html plugin event', (done) => {
-    var otherPluginCalled = false;
+    let otherPluginCalled = false;
+    const afterHtmlProcessingCallback = (htmlPluginData, callback) => {
+      otherPluginCalled = true;
+      // no callback webpack v4+
+      if (callback) {
+        callback(null, htmlPluginData);
+      }
+    };
+    const compilationCallback = (compilation) => {
+      if (compilation.hooks) {
+        compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tap('Test Plugin', afterHtmlProcessingCallback);
+      } else {
+        compilation.plugin('html-webpack-plugin-after-html-processing', afterHtmlProcessingCallback);
+      }
+    };
     const otherPlugin = {
       apply: compiler => {
-        compiler.plugin('compilation', compilation => {
-          compilation.plugin('html-webpack-plugin-after-html-processing', (htmlPluginData, callback) => {
-            otherPluginCalled = true;
-            // no callback webpack v4+
-            if (callback) {
-              callback(null, htmlPluginData);
-            }
-          });
-        });
+        if (compiler.hooks) {
+          compiler.hooks.compilation.tap('TestPlugin', compilationCallback);
+        } else {
+          compiler.plugin('compilation', compilationCallback);
+        }
       }
     };
     const additionalTest = () => {
