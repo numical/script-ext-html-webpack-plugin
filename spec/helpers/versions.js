@@ -42,7 +42,7 @@ const HWP_VERSION = {
     patch: 0,
     display: '4.0.0-alpha.2'
   }
-}
+};
 
 const selected = VERSIONS[process.env.VERSION];
 if (selected) {

@@ -29,7 +29,7 @@ Install the plugin with npm:
 ```shell
 $ npm install script-ext-html-webpack-plugin
 ```
-Not that you will need v3.0.6+ of [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
+Not that you will need v3.0.6+ or v4.x of [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 
 For those requiring earlier versions of node, please use the [last 1.x version](https://github.com/numical/script-ext-html-webpack-plugin/tree/v1.8.8) of this plugin.  However please note this does not have webpack 4.x support:
 ```shell
@@ -294,8 +294,9 @@ Change History
 --------------
 
 v2.0.x
+* support html-webpack-plugin 4.x - huge thanks to [@snadn](https://github.com/snadn)
 * support webpack 4.x - huge thanks to [@sherlock1982](https://github.com/sherlock1982)
-* node 9.x testing
+* node 9.x 10,x, 11.x testing
 * remove support for node 4.x and 5.x
 * remove Appveyor config
 * temororary remove  Handlebars test until loader supports webpack 4.x
