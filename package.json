@@ -1,6 +1,6 @@
 {
   "name": "script-ext-html-webpack-plugin",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Enhances html-webpack-plugin functionality with async and defer attributes for script elements",
   "main": "index.js",
   "files": [
@@ -9,13 +9,16 @@
   ],
   "scripts": {
     "pretest": "semistandard & install-module-versions dynavers.json",
-    "test": "VERSION=webpack1 jasmine && VERSION=webpack2 jasmine && VERSION=webpack3 jasmine && VERSION=webpack4 jasmine",
-    "test:webpack1": "VERSION=webpack1 jasmine",
-    "test:webpack2": "VERSION=webpack2 jasmine",
-    "test:webpack3": "VERSION=webpack3 jasmine",
-    "test:webpack4": "VERSION=webpack4 jasmine",
-    "debug": "DEBUG=ScriptExt VERSION=webpack4 jasmine",
-    "node-debug": "DEBUG=ScriptExt VERSION=webpack4 node-debug jasmine"
+    "test": "npm run test:hwp",
+    "test:hwp": "npm run test:hwp3 && npm run test:hwp4",
+    "test:hwp3": "cross-env VERSION=webpack1 HWP_VERSION=hwp3 jasmine && cross-env VERSION=webpack2 HWP_VERSION=hwp3 jasmine && cross-env VERSION=webpack3 HWP_VERSION=hwp3 jasmine && cross-env VERSION=webpack4 HWP_VERSION=hwp3 jasmine",
+    "test:hwp4": "cross-env VERSION=webpack4 HWP_VERSION=hwp4 jasmine",
+    "test:webpack1": "cross-env VERSION=webpack1 jasmine",
+    "test:webpack2": "cross-env VERSION=webpack2 jasmine",
+    "test:webpack3": "cross-env VERSION=webpack3 jasmine",
+    "test:webpack4": "cross-env VERSION=webpack4 jasmine",
+    "debug": "cross-env DEBUG=ScriptExt VERSION=webpack4 HWP_VERSION=hwp4 jasmine",
+    "node-debug": "cross-env DEBUG=ScriptExt VERSION=webpack4 HWP_VERSION=hwp4 node-debug jasmine"
   },
   "repository": {
     "type": "git",
@@ -46,11 +49,11 @@
     "debug": "^3.1.0"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "css-loader": "^0.28.10",
     "dynavers": "^0.2.0",
     "handlebars": "^4.0.11",
     "handlebars-loader": "1.6.0",
-    "html-webpack-plugin": "^3.0.6",
     "jasmine": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
     "jasmine2-custom-message": "^0.9.0",
@@ -61,7 +64,7 @@
   },
   "peerDependencies": {
     "webpack": "^1.0.0 || ^2.0.0 || ^3.0.0 || ^4.0.0",
-    "html-webpack-plugin": "^3.0.0"
+    "html-webpack-plugin": "^3.0.0 || ^4.0.0"
   },
   "engines": {
     "node": ">=6.11.5"
