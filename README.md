@@ -175,6 +175,23 @@ plugins: [
 ]  
 ```
 
+All scripts are preloaded with a ```crossorigin``` attribute set to enable CDN's:
+```javascript
+plugins: [
+  new HtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    custom {
+      test: /\.js$/,
+      attribute: 'crossorigin'
+      value: 'anonymous'
+    }
+    preload: {
+      test: /\.js$/
+    }
+  })
+]  
+```
+
 All asynchronous scripts are added as `preload` resource hints.  All other scripts are `async`:
 ```javascript
 plugins: [
@@ -285,6 +302,7 @@ Possibly a more compelling use case is to preload/prefetch dynamically loaded sc
 
 
 Notes:
+- custom attributes will be added to resource hints with the same *script matching pattern*.  This is useful for adding such attributes as ```crossorigin="anonymous"``` - see the Configuration Examples above;  
 - for more on resource hints, see the [`w3c`](https://www.w3.org/TR/resource-hints) definition;  
 - for a more complete solution that allows the preloading\fetching of assets other than scripts, see the [resource-hints-webpack-plugin](https://github.com/jantimon/resource-hints-webpack-plugin).
 
@@ -292,6 +310,9 @@ Notes:
 
 Change History
 --------------
+
+v2.1.x
+* custom attributes now added to resource hints too (see [pull request 53](https://github.com/numical/script-ext-html-webpack-plugin/pull/53) for discussion)
 
 v2.0.x
 * support html-webpack-plugin 4.x - huge thanks to [@snadn](https://github.com/snadn)

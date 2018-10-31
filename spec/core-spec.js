@@ -695,7 +695,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     testPlugin(config, expected, done);
   });
 
-  it('multiple customer attributes over multiple scripts', (done) => {
+  it('multiple custom attributes over multiple scripts', (done) => {
     const config = baseConfig(
       {
         async: [/(a|c).*/, 'b'],
@@ -719,6 +719,54 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       /(<script type="text\/paperscript" src="a.js" async wibble><\/script>)|(<script src="a.js" async wibble type="text\/paperscript"><\/script>)/,
       /(<script (type="text\/javascript" )?src="b.js" async><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js" async wibble><\/script>)/
+    ];
+    testPlugin(config, expected, done);
+  });
+
+  it('custom attributes also added to prefetch resource hints', (done) => {
+    const config = baseConfig(
+      {
+        custom: {
+          test: /.js$/,
+          attribute: 'customAttribute',
+          value: 'xyz'
+        },
+        prefetch: {
+          test: /.js$/
+        }
+      },
+      {},
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script (type="text\/javascript" )?src="index_bundle.js" customAttribute="xyz"><\/script>)/,
+      /(<link rel="prefetch" href="index_bundle.js" as="script" customAttribute="xyz"((\/>)|(><\/link>)))/
+    ];
+    testPlugin(config, expected, done);
+  });
+  it('custom attributes also added to preload resource hints', (done) => {
+    const config = baseConfig(
+      {
+        custom: {
+          test: /.js$/,
+          attribute: 'customAttribute',
+          value: 'xyz'
+        },
+        preload: {
+          test: /.js$/
+        }
+      },
+      {},
+      'index_bundle.js'
+    );
+    config.entry = path.join(__dirname, 'fixtures/script1.js');
+    const expected = baseExpectations();
+    expected.html = [
+      /(<script (type="text\/javascript" )?src="index_bundle.js" customAttribute="xyz"><\/script>)/,
+      /(<link rel="preload" href="index_bundle.js" as="script" customAttribute="xyz"((\/>)|(><\/link>)))/
+
     ];
     testPlugin(config, expected, done);
   });
