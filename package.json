@@ -51,7 +51,7 @@
   "devDependencies": {
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.1",
-    "dynavers": "^0.2.0",
+    "dynavers": "^0.3.1",
     "handlebars": "^4.0.12",
     "handlebars-loader": "1.7.0",
     "jasmine": "^3.3.0",

@@ -313,6 +313,7 @@ Change History
 
 v2.1.x
 * custom attributes now added to resource hints too (see [pull request 53](https://github.com/numical/script-ext-html-webpack-plugin/pull/53) for discussion)
+* update dependencies
 
 v2.0.x
 * support html-webpack-plugin 4.x - huge thanks to [@snadn](https://github.com/snadn)
