@@ -16,13 +16,13 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles single default value', () => {
-    const options = {defaultAttribute: 'async'};
+    const options = { defaultAttribute: 'async' };
     const expected = Object.assign({}, DEFAULT_OPTIONS, options);
     expect(normaliseOptions(options)).toEqual(expected);
   });
 
   it('handles single String pattern', () => {
-    const options = {async: '*.js'};
+    const options = { async: '*.js' };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       async: {
         test: ['*.js']
@@ -32,7 +32,7 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles single Regex pattern', () => {
-    const options = {inline: /\*.js$/};
+    const options = { inline: /\*.js$/ };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       inline: {
         test: [/\*.js$/]
@@ -42,7 +42,7 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles Array of String and Regex patterns', () => {
-    const options = {defer: ['*.js', /\*.js$/]};
+    const options = { defer: ['*.js', /\*.js$/] };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       defer: {
         test: ['*.js', /\*.js$/]
@@ -80,7 +80,7 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles single Regex pattern for resource hint', () => {
-    const options = {preload: /\*.js$/};
+    const options = { preload: /\*.js$/ };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       preload: {
         test: [/\*.js$/],
@@ -91,7 +91,7 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles Array of String and Regex patterns for resource hint', () => {
-    const options = {prefetch: ['*.js', /\*.js$/]};
+    const options = { prefetch: ['*.js', /\*.js$/] };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       prefetch: {
         test: ['*.js', /\*.js$/],
@@ -149,10 +149,10 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles single no value custom attribute', () => {
-    const options = {custom: {
+    const options = { custom: {
       test: '*.js',
       attribute: 'wibble'
-    }};
+    } };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       custom: [{
         test: ['*.js'],
@@ -164,11 +164,11 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles single custom attribute with a value', () => {
-    const options = {custom: {
+    const options = { custom: {
       test: '*.js',
       attribute: 'wibble',
       value: 'wobble'
-    }};
+    } };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       custom: [{
         test: ['*.js'],
@@ -180,7 +180,7 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles multiple custom attributes', () => {
-    const options = {custom: [
+    const options = { custom: [
       {
         test: '*.js',
         attribute: 'wibble'
@@ -195,7 +195,7 @@ describe('Correctly understands all configuration permutations', () => {
         attribute: 'warble',
         value: 'grunf'
       }
-    ]};
+    ] };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       custom: [
         {
