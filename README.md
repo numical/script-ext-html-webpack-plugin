@@ -182,7 +182,7 @@ plugins: [
   new ScriptExtHtmlWebpackPlugin({
     custom {
       test: /\.js$/,
-      attribute: 'crossorigin'
+      attribute: 'crossorigin',
       value: 'anonymous'
     }
     preload: {
