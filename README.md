@@ -180,7 +180,7 @@ All scripts are preloaded with a ```crossorigin``` attribute set to enable CDN's
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    custom {
+    custom: {
       test: /\.js$/,
       attribute: 'crossorigin'
       value: 'anonymous'
