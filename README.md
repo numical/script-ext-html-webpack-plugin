@@ -312,6 +312,7 @@ Change History
 --------------
 
 v2.1.x
+* support for changes in html-webpack-plugin 4.x since alpha and beta
 * custom attributes now added to resource hints too (see [pull request 53](https://github.com/numical/script-ext-html-webpack-plugin/pull/53) for discussion)
 * update dependencies
 
@@ -321,7 +322,7 @@ v2.0.x
 * node 9.x 10,x, 11.x testing
 * remove support for node 4.x and 5.x
 * remove Appveyor config
-* temororary remove  Handlebars test until loader supports webpack 4.x
+* temporary remove  Handlebars test until loader supports webpack 4.x
 
 v1.8.x
 * added custom attributes - now works on inline scripts as well e.g. for CSP nonces, -thanks [@niieani](https://github.com/niieani) and [@phallguy](https://github.com/phallguy)

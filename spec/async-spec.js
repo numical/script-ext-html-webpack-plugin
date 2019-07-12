@@ -74,15 +74,15 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     if (version.major === 1) {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk2.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
-        /(<link rel="preload" href="async-chunk0.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="preload" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);
@@ -101,15 +101,15 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     if (version.major === 1) {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
-        /(<link rel="prefetch" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="prefetch" href="async-chunk2.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="prefetch" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="prefetch" href="async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
-        /(<link rel="prefetch" href="async-chunk0.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="prefetch" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="prefetch" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="prefetch" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);
@@ -127,16 +127,16 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
-      /(<link rel="prefetch" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
+      /(<link rel="prefetch" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     if (version.major === 1) {
       expected.not.html = [
-        /(<link rel="prefetch" href="async-chunk0.js" as="script"((\/>)|(><\/link>)))/
+        /(<link rel="prefetch" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.not.html = [
-        /(<link rel="prefetch" href="async-chunk0.js" as="script"((\/>)|(><\/link>)))/
+        /(<link rel="prefetch" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);
@@ -159,15 +159,15 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     if (version.major === 1) {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="prefetch" href="async-chunk2.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="prefetch" href="async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
-        /(<link rel="prefetch" href="async-chunk0.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="prefetch" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);
@@ -186,17 +186,17 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     if (version.major === 1) {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" defer><\/script>)/,
-        /(<link rel="preload" href="index_bundle.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk2.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/,
+        /(<link rel="preload" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" defer><\/script>)/,
-        /(<link rel="preload" href="index_bundle.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk0.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/,
+        /(<link rel="preload" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);
@@ -214,18 +214,18 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" defer><\/script>)/,
-      /(<link rel="preload" href="index_bundle.js" as="script"((\/>)|(><\/link>)))/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/,
+      /(<link rel="preload" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     if (version.major === 1) {
       expected.not.html = [
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk2.js" as="script"((\/>)|(><\/link>)))/
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.not.html = [
-        /(<link rel="preload" href="async-chunk0.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+        /(<link rel="preload" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);
@@ -245,15 +245,15 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     if (version.major === 1) {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async><\/script>)/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk2.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async><\/script>)/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk0.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);
@@ -273,17 +273,17 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     if (version.major === 1) {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async><\/script>)/,
-        /(<link rel="preload" href="\/subdomain\/index_bundle.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk2.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="preload" href="\/subdomain\/index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async><\/script>)/,
-        /(<link rel="preload" href="\/subdomain\/index_bundle.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk0.js" as="script"((\/>)|(><\/link>)))/,
-        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((\/>)|(><\/link>)))/
+        /(<script (type="text\/javascript" )?src="\/subdomain\/index_bundle.js" async(="async")?><\/script>)/,
+        /(<link rel="preload" href="\/subdomain\/index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
+        /(<link rel="preload" href="\/subdomain\/async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     }
     testPlugin(config, expected, done);

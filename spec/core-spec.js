@@ -73,7 +73,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -89,7 +89,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle[0-9a-f]*.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle[0-9a-f]*.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -107,7 +107,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js\?[0-9a-f]*" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle.js\?[0-9a-f]*" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -123,7 +123,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" defer><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -141,7 +141,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js\?[0-9a-f]*" defer><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle.js\?[0-9a-f]*" defer(="defer")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -154,9 +154,9 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -169,8 +169,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" async><\/script>)/,
+      /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" async(="async")?><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js"><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -187,8 +187,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="a.js"><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" defer><\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="b.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -202,8 +202,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" defer><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" defer><\/script>)/,
+      /(<script (type="text\/javascript" )?src="a.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" defer(="defer")?><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js"><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -221,7 +221,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="a.js"><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" defer><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" defer(="defer")?><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js"><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -237,9 +237,9 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -290,7 +290,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.plugins.push(otherPlugin);
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, additionalTest);
   });
@@ -304,9 +304,9 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" async><\/script>)/,
-      /(<script type="module" src="b.js" async><\/script>)|(<script src="b.js" async type="module"><\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
+      /(<script type="module" src="b.js" async(="async")?><\/script>)|(<script src="b.js" async type="module"><\/script>)/,
+      /(<script (type="text\/javascript" )?src="c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -321,8 +321,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" defer><\/script>)/,
-      /(<script type="module" src="b.js" async><\/script>)|(<script src="b.js" async type="module"><\/script>)/,
+      /(<script (type="text\/javascript" )?src="a.js" defer(="defer")?><\/script>)/,
+      /(<script type="module" src="b.js" async(="async")?><\/script>)|(<script src="b.js" async type="module"><\/script>)/,
       /(<script type="module" src="c.js"><\/script>)|(<script src="c.js" type="module"><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -337,9 +337,9 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" async><\/script>)/,
+      /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
       /(<script>[\s\S]*<\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -356,9 +356,9 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js\?[0-9a-f]*" async><\/script>)/,
+      /(<script (type="text\/javascript" )?src="a.js\?[0-9a-f]*" async(="async")?><\/script>)/,
       /(<script>[\s\S]*<\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js\?[0-9a-f]*" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="c.js\?[0-9a-f]*" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -400,9 +400,9 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.output.publicPath = '/subdomain/subdir/';
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/a.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/b.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/c.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/a.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/b.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -416,9 +416,9 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.output.publicPath = '/subdomain/subdir';
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/a.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/b.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/c.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/a.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/b.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -436,8 +436,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/a.js"><\/script>)/,
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/b.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/c.js" defer><\/script>)/
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/b.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/c.js" defer(="defer")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -456,7 +456,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.output.publicPath = '/subdomain/subdir/';
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/main.js" async><\/script>)/
+      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/main.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -480,7 +480,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       ];
       const expected = baseExpectations();
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" async><\/script>)/,
+        /(<script (type="text\/javascript" )?src="index_bundle.js" async(="async")?><\/script>)/,
         /(<script>[\s\S]*Hello World[\s\S]*<\/script>)/
       ];
       testPlugin(config, expected, done);
@@ -513,7 +513,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="index_bundle.js"><\/script>)/,
-      /(<link rel="prefetch" href="index_bundle.js" as="script"((\/>)|(><\/link>)))/
+      /(<link rel="prefetch" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -532,7 +532,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="index_bundle.js\?[0-9a-f]*"><\/script>)/,
-      /(<link rel="prefetch" href="index_bundle.js\?[0-9a-f]*" as="script"((\/>)|(><\/link>)))/
+      /(<link rel="prefetch" href="index_bundle.js\?[0-9a-f]*" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -549,7 +549,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="index_bundle.js"><\/script>)/,
-      /(<link rel="preload" href="index_bundle.js" as="script"((\/>)|(><\/link>)))/
+      /(<link rel="preload" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -564,15 +564,15 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" async><\/script>)/,
-      /(<link rel="prefetch" href="a.js" as="script"((\/>)|(><\/link>)))/,
-      /(<link rel="preload" href="b.js" as="script"((\/>)|(><\/link>)))/
+      /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="c.js" async(="async")?><\/script>)/,
+      /(<link rel="prefetch" href="a.js" as="script"((>)|(\/>)|(><\/link>)))/,
+      /(<link rel="preload" href="b.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     expected.not.html = [
-      /(<link rel="prefetch" href="c.js" as="script"((\/>)|(><\/link>)))/,
-      /(<link rel="preload" href="a.js" as="script"((\/>)|(><\/link>)))/
+      /(<link rel="prefetch" href="c.js" as="script"((>)|(\/>)|(><\/link>)))/,
+      /(<link rel="preload" href="a.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -588,12 +588,12 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" async><\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" defer><\/script>)/,
-      /(<link rel="prefetch" href="a.js" as="script"((\/>)|(><\/link>)))/,
-      /(<link rel="preload" href="b.js" as="script"((\/>)|(><\/link>)))/,
-      /(<link rel="prefetch" href="c.js" as="script"((\/>)|(><\/link>)))/
+      /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" async(="async")?><\/script>)/,
+      /(<script (type="text\/javascript" )?src="c.js" defer(="defer")?><\/script>)/,
+      /(<link rel="prefetch" href="a.js" as="script"((>)|(\/>)|(><\/link>)))/,
+      /(<link rel="preload" href="b.js" as="script"((>)|(\/>)|(><\/link>)))/,
+      /(<link rel="prefetch" href="c.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -611,8 +611,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       /(<script (type="text\/javascript" )?src="\/subdomain\/a.js"><\/script>)/,
       /(<script (type="text\/javascript" )?src="\/subdomain\/b.js"><\/script>)/,
       /(<script (type="text\/javascript" )?src="\/subdomain\/c.js"><\/script>)/,
-      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script"((\/>)|(><\/link>)))/,
-      /(<link rel="preload" href="\/subdomain\/b.js" as="script"((\/>)|(><\/link>)))/
+      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script"((>)|(\/>)|(><\/link>)))/,
+      /(<link rel="preload" href="\/subdomain\/b.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -630,8 +630,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       /(<script (type="text\/javascript" )?src="\/subdomain\/a.js"><\/script>)/,
       /(<script (type="text\/javascript" )?src="\/subdomain\/b.js"><\/script>)/,
       /(<script (type="text\/javascript" )?src="\/subdomain\/c.js"><\/script>)/,
-      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script"((\/>)|(><\/link>)))/,
-      /(<link rel="preload" href="\/subdomain\/b.js" as="script"((\/>)|(><\/link>)))/
+      /(<link rel="prefetch" href="\/subdomain\/a.js" as="script"((>)|(\/>)|(><\/link>)))/,
+      /(<link rel="preload" href="\/subdomain\/b.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -641,7 +641,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       {
         custom: {
           test: /.js$/,
-          attribute: 'customAttribute'
+          attribute: 'customattribute'
         }
       },
       {},
@@ -650,7 +650,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" customAttribute><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" customattribute><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -660,7 +660,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       {
         custom: {
           test: /.js$/,
-          attribute: 'customAttribute',
+          attribute: 'customattribute',
           value: 'xyz'
         }
       },
@@ -670,7 +670,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" customAttribute="xyz"><\/script>)/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" customattribute="xyz"><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -717,7 +717,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script type="text\/paperscript" src="a.js" async wibble><\/script>)|(<script src="a.js" async wibble type="text\/paperscript"><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" async><\/script>)/,
+      /(<script (type="text\/javascript" )?src="b.js" async(="async")?><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js" async wibble><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -728,7 +728,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       {
         custom: {
           test: /.js$/,
-          attribute: 'customAttribute',
+          attribute: 'customattribute',
           value: 'xyz'
         },
         prefetch: {
@@ -741,8 +741,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" customAttribute="xyz"><\/script>)/,
-      /(<link rel="prefetch" href="index_bundle.js" as="script" customAttribute="xyz"((\/>)|(><\/link>)))/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" customattribute="xyz"><\/script>)/,
+      /(<link rel="prefetch" href="index_bundle.js" as="script" customattribute="xyz"((>)|(\/>)|(><\/link>)))/
     ];
     testPlugin(config, expected, done);
   });
@@ -751,7 +751,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
       {
         custom: {
           test: /.js$/,
-          attribute: 'customAttribute',
+          attribute: 'customattribute',
           value: 'xyz'
         },
         preload: {
@@ -764,8 +764,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" customAttribute="xyz"><\/script>)/,
-      /(<link rel="preload" href="index_bundle.js" as="script" customAttribute="xyz"((\/>)|(><\/link>)))/
+      /(<script (type="text\/javascript" )?src="index_bundle.js" customattribute="xyz"><\/script>)/,
+      /(<link rel="preload" href="index_bundle.js" as="script" customattribute="xyz"((>)|(\/>)|(><\/link>)))/
 
     ];
     testPlugin(config, expected, done);
