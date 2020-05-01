@@ -27,13 +27,13 @@ Installation
 You must be running webpack (1.x, 2.x, 3.x, 4.x) on node 6+.
 Install the plugin with npm:
 ```shell
-$ npm install script-ext-html-webpack-plugin
+$ npm install --save-dev script-ext-html-webpack-plugin
 ```
 Not that you will need v3.0.6+ or v4.x of [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 
 For those requiring earlier versions of node, please use the [last 1.x version](https://github.com/numical/script-ext-html-webpack-plugin/tree/v1.8.8) of this plugin.  However please note this does not have webpack 4.x support:
 ```shell
-$ npm install script-ext-html-webpack-plugin@1.8.8
+$ npm install --save-dev script-ext-html-webpack-plugin@1.8.8
 ```
 
 You may see an `UNMET PEER DEPENDENCY` warnings for webpack and various plugins.
