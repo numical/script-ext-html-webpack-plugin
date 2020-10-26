@@ -17,15 +17,15 @@ const VERSIONS = {
   },
   webpack3: {
     major: 3,
-    minor: 11,
+    minor: 12,
     patch: 0,
-    display: '3.11.0'
+    display: '3.12.0'
   },
   webpack4: {
     major: 4,
-    minor: 35,
-    patch: 3,
-    display: '4.35.3'
+    minor: 44,
+    patch: 2,
+    display: '4.44.2'
   }
 };
 
@@ -38,9 +38,9 @@ const HWP_VERSION = {
   },
   hwp4: {
     major: 4,
-    minor: 0,
+    minor: 5,
     patch: 0,
-    display: '4.0.0-beta.5'
+    display: '4.5.0'
   }
 };
 

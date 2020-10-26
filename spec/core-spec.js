@@ -123,7 +123,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/
+      /(<script (type="text\/javascript" )?(src="index_bundle.js" defer(="defer")?)|(defer(="defer")? src="index_bundle.js")><\/script>)/,
     ];
     testPlugin(config, expected, done);
   });
@@ -141,7 +141,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     config.entry = path.join(__dirname, 'fixtures/script1.js');
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js\?[0-9a-f]*" defer(="defer")?><\/script>)/
+      /(<script (type="text\/javascript" )?(src="index_bundle.js\?[0-9a-f]*" defer(="defer")?)|(defer(="defer")? src="index_bundle.js\?[0-9a-f]*")><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -187,7 +187,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="a.js"><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?(src="b.js" defer(="defer")?)|(defer(="defer")? src="b.js")><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js" async(="async")?><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -202,8 +202,8 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" defer(="defer")?><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?(src="a.js" defer(="defer")?)|(defer(="defer")? src="a.js")><\/script>)/,
+      /(<script (type="text\/javascript" )?(src="b.js" defer(="defer")?)|(defer(="defer")? src="b.js")><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js"><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -221,7 +221,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     expected.html = [
       /(<script (type="text\/javascript" )?src="a.js"><\/script>)/,
-      /(<script (type="text\/javascript" )?src="b.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?(src="b.js" defer(="defer")?)|(defer(="defer")? src="b.js")><\/script>)/,
       /(<script (type="text\/javascript" )?src="c.js"><\/script>)/
     ];
     testPlugin(config, expected, done);
@@ -321,7 +321,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="a.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?(src="a.js" defer(="defer")?)|(defer(="defer")? src="a.js")><\/script>)/,
       /(<script type="module" src="b.js" async(="async")?><\/script>)|(<script src="b.js" async type="module"><\/script>)/,
       /(<script type="module" src="c.js"><\/script>)|(<script src="c.js" type="module"><\/script>)/
     ];
@@ -437,7 +437,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     expected.html = [
       /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/a.js"><\/script>)/,
       /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/b.js" async(="async")?><\/script>)/,
-      /(<script (type="text\/javascript" )?src="\/subdomain\/subdir\/c.js" defer(="defer")?><\/script>)/
+      /(<script (type="text\/javascript" )?(src="\/subdomain\/subdir\/c.js" defer(="defer")?)|(defer(="defer")? src="\/subdomain\/subdir\/c.js")><\/script>)/
     ];
     testPlugin(config, expected, done);
   });
@@ -590,7 +590,7 @@ describe(`Core functionality (webpack ${version.display})`, function () {
     expected.html = [
       /(<script (type="text\/javascript" )?src="a.js" async(="async")?><\/script>)/,
       /(<script (type="text\/javascript" )?src="b.js" async(="async")?><\/script>)/,
-      /(<script (type="text\/javascript" )?src="c.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?(src="c.js" defer(="defer")?)|(defer(="defer")? src="c.js")><\/script>)/,
       /(<link rel="prefetch" href="a.js" as="script"((>)|(\/>)|(><\/link>)))/,
       /(<link rel="preload" href="b.js" as="script"((>)|(\/>)|(><\/link>)))/,
       /(<link rel="prefetch" href="c.js" as="script"((>)|(\/>)|(><\/link>)))/

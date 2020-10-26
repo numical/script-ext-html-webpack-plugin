@@ -186,14 +186,14 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     const expected = baseExpectations();
     if (version.major === 1) {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/,
+        /(<script (type="text\/javascript" )?(src="index_bundle.js" defer(="defer")?)|(defer(="defer")? src="index_bundle.js")><\/script>)/,
         /(<link rel="preload" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/,
         /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/,
         /(<link rel="preload" href="async-chunk2.js" as="script"((>)|(\/>)|(><\/link>)))/
       ];
     } else {
       expected.html = [
-        /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/,
+        /(<script (type="text\/javascript" )?(src="index_bundle.js" defer(="defer")?)|(defer(="defer")? src="index_bundle.js")><\/script>)/,
         /(<link rel="preload" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/,
         /(<link rel="preload" href="async-chunk0.js" as="script"((>)|(\/>)|(><\/link>)))/,
         /(<link rel="preload" href="async-chunk1.js" as="script"((>)|(\/>)|(><\/link>)))/
@@ -214,7 +214,7 @@ describe(`Async functionality (webpack ${version.display})`, function () {
     );
     const expected = baseExpectations();
     expected.html = [
-      /(<script (type="text\/javascript" )?src="index_bundle.js" defer(="defer")?><\/script>)/,
+      /(<script (type="text\/javascript" )?(src="index_bundle.js" defer(="defer")?)|(defer(="defer")? src="index_bundle.js")><\/script>)/,
       /(<link rel="preload" href="index_bundle.js" as="script"((>)|(\/>)|(><\/link>)))/
     ];
     if (version.major === 1) {
