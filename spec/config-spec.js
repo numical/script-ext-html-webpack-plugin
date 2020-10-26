@@ -149,10 +149,12 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles single no value custom attribute', () => {
-    const options = { custom: {
-      test: '*.js',
-      attribute: 'wibble'
-    } };
+    const options = {
+      custom: {
+        test: '*.js',
+        attribute: 'wibble'
+      }
+    };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       custom: [{
         test: ['*.js'],
@@ -164,11 +166,13 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles single custom attribute with a value', () => {
-    const options = { custom: {
-      test: '*.js',
-      attribute: 'wibble',
-      value: 'wobble'
-    } };
+    const options = {
+      custom: {
+        test: '*.js',
+        attribute: 'wibble',
+        value: 'wobble'
+      }
+    };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       custom: [{
         test: ['*.js'],
@@ -180,22 +184,24 @@ describe('Correctly understands all configuration permutations', () => {
   });
 
   it('handles multiple custom attributes', () => {
-    const options = { custom: [
-      {
-        test: '*.js',
-        attribute: 'wibble'
-      },
-      {
-        test: 'a',
-        attribute: 'wobble',
-        value: 'xyz'
-      },
-      {
-        test: 'b',
-        attribute: 'warble',
-        value: 'grunf'
-      }
-    ] };
+    const options = {
+      custom: [
+        {
+          test: '*.js',
+          attribute: 'wibble'
+        },
+        {
+          test: 'a',
+          attribute: 'wobble',
+          value: 'xyz'
+        },
+        {
+          test: 'b',
+          attribute: 'warble',
+          value: 'grunf'
+        }
+      ]
+    };
     const expected = Object.assign({}, DEFAULT_OPTIONS, {
       custom: [
         {
