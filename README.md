@@ -4,7 +4,29 @@ Script Extension for HTML Webpack Plugin
 
 [![NPM](https://nodei.co/npm/script-ext-html-webpack-plugin.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/script-ext-html-webpack-plugin/)
 
+Deprecation Warning
+-------------------
+**tl;dr**  
+This project is no longer maintained.  It does not support Webpack 5.  
 
+**A bit more detail**  
+Any look at the [project activity](https://github.com/numical/script-ext-html-webpack-plugin/pulse) will show that I have not been able to maintain this project adequately.  
+The advent of version 5 of Webpack requires another bout of refactoring that I simply have no time for.  
+Consequently v2.15.0 will be the last version of this plugin.
+My thanks to all users, and especially to all contributors, of this plugin over the years.  
+My apologies to all those whose webpack 5 migration has been made more complicated by this decision.
+
+**But I still want to use the plugin...**  
+Feel free!  
+My last update works with versions of v4.44.2 of webpack and v4.5.0 of html-webpack-plugin.  
+Forkers feel free!  That's what the licence is for.  
+In fact, if you fork with an intention to support on-going development, let me know!
+I'll happily link to your repository here and offer some tips (main one: ditch backward compatibility - it's a pain).  
+I will formally archive this repository at the end of the 2020. 
+
+
+Summary
+-------
 Enhances [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 functionality with different deployment options for your scripts including:
 - [`async`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes) attribute;
@@ -27,13 +49,13 @@ Installation
 You must be running webpack (1.x, 2.x, 3.x, 4.x) on node 6+.
 Install the plugin with npm:
 ```shell
-$ npm install script-ext-html-webpack-plugin
+$ npm install --save-dev script-ext-html-webpack-plugin
 ```
 Not that you will need v3.0.6+ or v4.x of [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin)
 
 For those requiring earlier versions of node, please use the [last 1.x version](https://github.com/numical/script-ext-html-webpack-plugin/tree/v1.8.8) of this plugin.  However please note this does not have webpack 4.x support:
 ```shell
-$ npm install script-ext-html-webpack-plugin@1.8.8
+$ npm install --save-dev script-ext-html-webpack-plugin@1.8.8
 ```
 
 You may see an `UNMET PEER DEPENDENCY` warnings for webpack and various plugins.
@@ -135,7 +157,7 @@ All scripts with 'important' in their name are sync and all others set to `defer
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    sync: 'important'
+    sync: 'important',
     defaultAttribute: 'defer'
   })
 ]  
@@ -184,7 +206,7 @@ plugins: [
       test: /\.js$/,
       attribute: 'crossorigin',
       value: 'anonymous'
-    }
+    },
     preload: {
       test: /\.js$/
     }
@@ -197,7 +219,7 @@ All asynchronous scripts are added as `preload` resource hints.  All other scrip
 plugins: [
   new HtmlWebpackPlugin(),
   new ScriptExtHtmlWebpackPlugin({
-    async: /\.js$/
+    async: /\.js$/,
     preload: {
       test: /\.js$/,
       chunks: 'async'
@@ -310,6 +332,12 @@ Notes:
 
 Change History
 --------------
+
+v2.1.5
+* end of life version
+* updated all dependencies
+* fixes some tests to accomodate change in html-webpack-plugin output
+* added end-of-life section to README.
 
 v2.1.x
 * support for changes in html-webpack-plugin 4.x since alpha and beta
