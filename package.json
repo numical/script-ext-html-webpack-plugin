@@ -45,7 +45,7 @@
   },
   "homepage": "https://github.com/numical/script-ext-html-webpack-plugin",
   "dependencies": {
-    "debug": "^4.2.0"
+    "debug": "^4.3.1"
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
